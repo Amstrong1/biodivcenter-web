@@ -1,0 +1,135 @@
+<template>
+    <div class="flex flex-col items-stretch w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto">
+            <div class="flex justify-center items-center p-4 table-search-container w-full">
+                <div class="relative">
+                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-800" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="custom-search-input"
+                        class="border-0 block p-2 pl-10 w-80 form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg text-xs"
+                        placeholder="Rechercher dans la liste">
+                </div>
+            </div>
+
+            <div class="p-6 bg-[#f1f4ef] rounded-lg overflow-x-auto">
+                <table class="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr class="tracking-wide text-left text-sm bg-[#ddf3d1]">
+                            <th v-for="(title, column) in mattributes" :key="column" class="px-4 py-3">
+                                {{ title }}
+                            </th>
+                            <th v-if="mactions" class="px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr v-if="resources.length === 0" class="border-b border-slate-500">
+                            <td :colspan="Object.keys(mattributes).length + 1"
+                                class="px-6 py-4 whitespace-nowrap text-center text-xs">
+                                Aucun Element
+                            </td>
+                        </tr>
+
+                        <tr v-for="resource in resources" class="">
+                            <td v-for="(title, column) in mattributes" :key="column" class="px-4 py-3 text-xs">
+                                <template v-if="column === 'logo' || column === 'picture' || column === 'photo'">
+                                    <a class="flex items-center justify-center text-sm hover:opacity-80">
+                                        <div class="relative hidden h-12 w-12 mr-3 md:block">
+                                            <img v-if="resource[column] !== null"
+                                                class="object-cover w-full h-full rounded-lg"
+                                                :src="'/storage/' + resource[column]" alt="profile" loading="lazy" />
+
+                                            <img v-else class="object-cover w-full h-full rounded-lg"
+                                                src="/assets/icon/user.png" alt="profile" loading="lazy" />
+                                        </div>
+                                    </a>
+                                </template>
+                                <template v-else-if="column === 'status'">
+                                    <span :class="[
+                                        'whitespace-nowrap px-2 py-1 font-semibold leading-tight rounded-full',
+                                        resource[column] === 'Terminé' ?
+                                            'text-primary bg-[#ddf3d1]' :
+                                            resource[column] === 'En cours' ?
+                                                'text-gray-700 bg-gray-100' :
+                                                'text-gray-700 bg-yellow-100'
+                                    ]">
+                                        {{ resource[column] }}
+                                    </span>
+                                </template>
+                                <template v-else>
+                                    <span v-if="isString(resource[column]) && resource[column].length > 100">
+                                        {{ truncate(resource[column], 100) }}
+                                    </span>
+                                    <span v-else>
+                                        {{ resource[column] }}
+                                    </span>
+                                </template>
+                            </td>
+
+                            <td v-if="mactions" class="px-4 py-3">
+                                <div class="flex items-center justify-start space-x-4 text-sm">
+                                    <Link  v-if="mactions.show"
+                                        :href="route(`${pluralize(type)}.show`, resource.id)"
+                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-bold">
+                                        Voir
+                                    </Link>
+                                    <Link  v-if="mactions.edit"
+                                        :href="route(`${pluralize(type)}.edit`, resource.id)"
+                                        class="w-12 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-bold"
+                                        aria-label="Edit">
+                                        Editer
+                                    </Link>
+                                    <form v-if="mactions.delete" onsubmit="event.preventDefault(); deleteConfirmation(this);"
+                                        :action="route(`${pluralize(type)}.destroy`, resource.id)" method="POST">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" :value="csrf">
+                                        <button type="submit"
+                                            class="w-12 p-2 text-xs bg-red-200 text-red-600 rounded-full text-center font-bold"
+                                            aria-label="Delete">
+                                            Sup
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { truncate, isString } from "lodash";
+import { Link } from '@inertiajs/vue3';
+import pluralize from "pluralize";
+import { defineProps } from 'vue'
+
+defineProps({
+    resources: {
+        type: Array,
+        required: true
+    },
+    mattributes: {
+        type: Object,
+        required: true
+    },
+    mactions: {
+        type: Object,
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    csrf: {
+        type: String,
+        required: true
+    }
+})
+
+</script>
