@@ -16,6 +16,8 @@ class Relocation extends Model
         'ong_destination_name', 
         'site_origin_name', 
         'site_destination_name',
+        'pen_origin_name',
+        'pen_destination_name',        
         'user_name',
         'animal_name',
         'formated_date_transfert',
@@ -53,7 +55,7 @@ class Relocation extends Model
 
     public function getFormatedDateTransfertAttribute()
     {
-        return date('d/m/Y', strtotime($this->date_transfert));
+        return date('Y-m-d', strtotime($this->date_transfert));
     }
 
     public function getOngOriginNameAttribute()
@@ -84,5 +86,15 @@ class Relocation extends Model
     public function getAnimalNameAttribute()
     {
         return $this->animal->name;
+    }
+
+    public function getPenOriginNameAttribute()
+    {
+        return $this->pen_origin->number ?? 'Non défini';
+    }
+
+    public function getPenDestinationNameAttribute()
+    {
+        return $this->pen_destination->number ?? 'Non défini';
     }
 }

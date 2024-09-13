@@ -11,7 +11,6 @@ class AlimentationController extends Controller
     public function index($site_id)
     {
         $alimentations = Alimentation::where('site_id', $site_id)
-            ->select('id', 'food', 'specie_id')
             ->orderBy('id', 'desc')
             ->get()
             ->append('specie_name');

@@ -66,7 +66,12 @@ Route::get('/species-list', function () {
 
 Route::get('/parents/{specie_id}', function () {
     try {
-        return response()->json(Animal::where('specie_id', request('specie_id'))->get('id', 'name'), 200);
+        return response()->json(
+            Animal::where('specie_id', request('specie_id'))
+                ->select('id', 'name')
+                ->get(),
+            200
+        );
     } catch (\Exception $e) {
         return response()->json($e);
     }
@@ -74,9 +79,13 @@ Route::get('/parents/{specie_id}', function () {
 
 Route::get('/pens-list/{site_id}', function () {
     try {
-        return response()->json(Pen::where('site_id', request('site_id'))->get('id', 'number'), 200);
+        return response()->json(
+            Pen::where('site_id', request('site_id'))
+                ->select('id', 'number')
+                ->get(),
+            200
+        );
     } catch (\Exception $e) {
         return response()->json($e);
     }
 });
-

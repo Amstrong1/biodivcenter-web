@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('label');
             $table->string('description');
             $table->string('corrective_action')->nullable();
-            $table->integer('cost')->default(0);
-            $table->string('temperature')->nullable();
-            $table->string('height')->nullable();
-            $table->string('weight')->nullable();
+            $table->numeric('cost', 10, 2)->default(0);
+            $table->integer('temperature')->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('weight')->nullable();
             $table->string('slug');
             $table->timestamps();
         });

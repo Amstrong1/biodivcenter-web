@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('age_range');
             $table->string('food');
             $table->string('frequency');
-            $table->string('quantity');
+            $table->integer('quantity');
             $table->decimal('cost', 10, 2);
             $table->string('slug');
             $table->timestamps();

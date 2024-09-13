@@ -14,6 +14,6 @@ class Observation extends Model
 
     public function getFormatedDateAttribute()
     {
-        return date('d/m/Y', strtotime($this->created_at));
+        return date('Y-m-d', strtotime($this->created_at));
     }
 }

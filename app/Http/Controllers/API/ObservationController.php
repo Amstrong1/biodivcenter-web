@@ -11,7 +11,6 @@ class ObservationController extends Controller
     public function index($site_id)
     {
         $observations = Observation::where('site_id', $site_id)
-            ->select('id', 'subject')
             ->orderBy('id', 'desc')
             ->get()
             ->append('formated_date');

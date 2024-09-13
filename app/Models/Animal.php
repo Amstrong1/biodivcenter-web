@@ -10,38 +10,47 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Animal extends Model
 {
-    use HasFactory;    
+    use HasFactory;
 
     protected $guarded = [];
 
-    protected $append = ['age', 'site_name', 'specie_name', 'pen_number', 'parent'];
+    protected $append = [
+        'age',
+        'site_name',
+        'specie_name',
+        'pen_number',
+        'parent',
+        'formated_created_at',
+        'sanitary_state_label',
+        'sanitary_state_detail',
+    ];
 
-    public function specie() : BelongsTo
+    public function specie(): BelongsTo
     {
         return $this->belongsTo(Specie::class);
-    }  
+    }
 
-    public function site() : BelongsTo
+    public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
     }
 
-    public function pen() : BelongsTo
+    public function pen(): BelongsTo
     {
         return $this->belongsTo(Pen::class);
-    }    
+    }
 
-    public function sanitaryState() : HasMany
+    public function sanitaryState(): HasMany
     {
         return $this->hasMany(SanitaryState::class);
     }
 
-    public function reproduction() : HasMany
+    public function reproduction(): HasMany
     {
         return $this->hasMany(Reproduction::class);
     }
 
-    public function relocation() : HasMany
+    public function relocation(): HasMany
     {
         return $this->hasMany(Relocation::class);
     }
@@ -71,5 +80,20 @@ class Animal extends Model
     {
         $parent = $this->animal_id !== null ? Animal::findOrFail($this->animal_id)->name : 'Non défini';
         return $parent;
+    }
+
+    public function getFormatedCreatedAtAttribute()
+    {
+        return $this->created_at->format('Y-m-d');
+    }
+
+    public function getSanitaryStateLabelAttribute()
+    {
+        return $this->sanitaryState->last()->label ?? 'Sain';
+    }
+
+    public function getSanitaryStateDetailAttribute()
+    {
+        return $this->sanitaryState->last()->description ?? 'Non défini';
     }
 }

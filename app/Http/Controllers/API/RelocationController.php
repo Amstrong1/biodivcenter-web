@@ -15,7 +15,9 @@ class RelocationController extends Controller
             ->select('id', 'date_transfert', 'animal_id')
             ->orderBy('id', 'desc')
             ->get()
-            ->append('animal_name');
+            ->append('animal_name')
+            ->append('pen_origin_name')
+            ->append('pen_destination_name');
         return response()->json($relocations, 200);
     }
 

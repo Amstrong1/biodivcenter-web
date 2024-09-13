@@ -11,7 +11,6 @@ class ReproductionController extends Controller
     public function index($site_id)
     {
         $reproductions = Reproduction::where('site_id', $site_id)
-            ->select('id', 'phase', 'date', 'animal_id')
             ->orderBy('id', 'desc')
             ->get()
             ->append('animal_name');

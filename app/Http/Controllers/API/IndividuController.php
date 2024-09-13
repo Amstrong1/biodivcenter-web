@@ -12,9 +12,12 @@ class IndividuController extends Controller
     public function index($site_id)
     {
         $animals = Animal::where('site_id', $site_id)
-            ->select('id', 'name', 'photo', 'specie_id')
             ->orderBy('id', 'desc')
             ->get()
+            ->append('parent')
+            ->append('formated_created_at')
+            ->append('sanitary_state_label')
+            ->append('sanitary_state_detail')
             ->append('specie_name');
         return response()->json($animals, 200);
     }
