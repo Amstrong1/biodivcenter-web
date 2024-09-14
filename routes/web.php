@@ -24,7 +24,7 @@ use App\Http\Controllers\ClassificationController;
 
 Route::get('/', [LandingController::class, 'index'])->name('guest.index');
 Route::get('/guest/sites', [LandingController::class, 'indexSite'])->name('guest.sites');
-Route::get('/guest/sites/{slug}', [LandingController::class, 'showSite'])->name('guest.sites.show');
+Route::get('/guest/sites/{id}', [LandingController::class, 'showSite'])->name('guest.sites.show');
 Route::get('/guest/species', [LandingController::class, 'indexSpecies'])->name('guest.species');
 
 

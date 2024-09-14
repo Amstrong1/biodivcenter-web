@@ -16,6 +16,7 @@ class Animal extends Model
 
     protected $append = [
         'age',
+        'ong_name',
         'site_name',
         'specie_name',
         'pen_number',
@@ -28,6 +29,11 @@ class Animal extends Model
     public function specie(): BelongsTo
     {
         return $this->belongsTo(Specie::class);
+    }
+
+    public function ong(): BelongsTo
+    {
+        return $this->belongsTo(Ong::class);
     }
 
     public function site(): BelongsTo
@@ -95,5 +101,9 @@ class Animal extends Model
     public function getSanitaryStateDetailAttribute()
     {
         return $this->sanitaryState->last()->description ?? 'Non défini';
+    }
+
+    public function getOngNameAttribute() {
+        return $this->ong->name;
     }
 }

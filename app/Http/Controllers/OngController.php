@@ -19,7 +19,7 @@ class OngController extends Controller
     {
         if (Auth::user()->role == 'admin') {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::all(),
+                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
                 'csrf' => csrf_token(),
                 'my_actions' => $this->ongActions(),
                 'my_attributes' => $this->ongColumns(),
@@ -27,7 +27,7 @@ class OngController extends Controller
             ]);
         } else {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::all(),
+                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
                 'my_attributes' => $this->ongColumns(),
             ]);
         }

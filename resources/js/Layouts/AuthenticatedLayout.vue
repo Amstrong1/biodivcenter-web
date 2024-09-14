@@ -20,41 +20,44 @@ const getPageTitle = () => {
         { pattern: /sites.*edit/, title: 'Modifier les informations du site' },
         { pattern: /sites/, title: 'Voir les informations du site' },
 
+        { pattern: /profile/, title: 'Voir les informations du profil' },
+
         { pattern: /^\/users\/?$/, title: 'Liste des utilisateurs' },
         { pattern: /users.*edit/, title: 'Modifier les informations de l\'utilisateur' },
-        { pattern: /users.*show/, title: 'Voir les informations de l\'utilisateur' },
+        { pattern: /users./, title: 'Voir les informations de l\'utilisateur' },
 
         { pattern: /^\/observations\/?$/, title: 'Liste des observations' },
-        { pattern: /^\/observations.*edit/, title: 'Modifier les informations de l\'ONG' },
-        { pattern: /^\/observations.*show\/?$/, title: 'Voir les informations de l\'ONG' },
+        { pattern: /observations.*edit/, title: 'Modifier les informations de l\'ONG' },
+        { pattern: /observations/, title: 'Voir les informations de l\'ONG' },
 
         { pattern: /^\/branches\/?$/, title: 'Liste des embranchements' },
-        { pattern: /^\/branches.*edit/, title: 'Modifier les informations de l\'embranchement' },
+        { pattern: /branches.*edit/, title: 'Modifier les informations de l\'embranchement' },
 
         { pattern: /^\/orders\/?$/, title: 'Liste des ordres' },
-        { pattern: /^\/orders.*edit/, title: 'Modifier les informations de l\'ordre' },
+        { pattern: /orders.*edit/, title: 'Modifier les informations de l\'ordre' },
 
         { pattern: /^\/families\/?$/, title: 'Liste des familles' },
-        { pattern: /^\/families.*edit/, title: 'Modifier les informations de la famille' },
+        { pattern: /families.*edit/, title: 'Modifier les informations de la famille' },
 
         { pattern: /^\/species\/?$/, title: 'Liste des espèces' },
-        { pattern: /^\/species.*edit/, title: 'Modifier les informations de l\'espèce' },
-        { pattern: /^\/species.*show\/?$/, title: 'Voir les informations de l\'espèce' },
+        { pattern: /species.*edit/, title: 'Modifier les informations de l\'espèce' },
+        { pattern: /species/, title: 'Voir les informations de l\'espèce' },
 
         { pattern: /^\/genera\/?$/, title: 'Liste des genres' },
         { pattern: /^\/genera\/edit/, title: 'Modifier les informations du genre' },
 
         { pattern: /^\/classifications\/?$/, title: 'Liste des classifications' },
-        { pattern: /^\/classifications.*edit/, title: 'Modifier les informations de la classification' },
+        { pattern: /classifications.*edit/, title: 'Modifier les informations de la classification' },
 
         { pattern: /^\/reigns\/?$/, title: 'Liste des règnes' },
-        { pattern: /^\/reigns.*edit/, title: 'Modifier les informations du règne' },
+        { pattern: /reigns.*edit/, title: 'Modifier les informations du règne' },
 
         { pattern: /^\/animals\/?$/, title: 'Liste des individus des espèces' },
-        { pattern: /^\/animals.*show\/?$/, title: 'Voir les informations de l\'animal' },
+        { pattern: /animals/, title: 'Voir les informations de l\'animal' },
 
-        { pattern: /^\/type-habitats\/?$/, title: 'Liste des types d\'habitat' },
-        { pattern: /^\/type-habitats.*edit/, title: 'Modifier les informations du type d\'habitat' },
+        { pattern: /^\/relocations\/?$/, title: 'Liste des transferts' },
+        { pattern: /relocations.*edit/, title: 'Modifier les informations du transfert' },
+        { pattern: /relocations/, title: 'Voir les informations du transfert' },
     ];
 
     for (const route of routes) {
@@ -73,10 +76,10 @@ const getPageTitle = () => {
             <Sidenav />
         </header>
 
-        <main class="flex-1 max-w-7xl mx-auto sm:px-6 lg:px-8 py-12 ml-64">
+        <main class="flex-1 mx-auto sm:px-6 lg:px-8 py-12 ml-64">
             <nav class="bg-white">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto">
+                <div class="mx-auto">
                     <div class="flex justify-between items-center h-16">
                         <div class="text-2xl text-primary font-bold">
                             {{ getPageTitle() }}
@@ -102,9 +105,9 @@ const getPageTitle = () => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')"> Profil </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            Déconnexion
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -151,9 +154,9 @@ const getPageTitle = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')"> Profil </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Déconnexion
                             </ResponsiveNavLink>
                         </div>
                     </div>

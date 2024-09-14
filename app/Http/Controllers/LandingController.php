@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use App\Models\Specie;
 use Inertia\Inertia;
 
 class LandingController extends Controller
@@ -14,54 +15,44 @@ class LandingController extends Controller
 
     public function indexSite()
     {
-        $sites = Site::all();
-        $initialMarkers = [
-            [
-                'position' => [
-                    'lat' => 6.36536,
-                    'lng' => 2.41833,
+        $sites = Site::all()->append('ong_country');
+        $initialMarkers = [];
+        foreach ($sites as $site) {
+            $initialMarkers = [
+                [
+                    'position' => [
+                        'lat' => convertToDecimal($site->lat),
+                        'lng' => convertToDecimal($site->lng),
+                    ],
+                    'draggable' => false
                 ],
-                'draggable' => false
-            ],
-            [
-                'position' => [
-                    'lat' => 7.36536,
-                    'lng' => 2.41833,
-                ],
-                'draggable' => false
-            ],
-        ];
+            ];
+        }
+
         return Inertia::render('Site', [
             'sites' => $sites,
             'initialMarkers' => $initialMarkers
         ]);
     }
 
-    public function showSite($slug)
+    public function showSite($id)
     {
+        $site = Site::where('slug', $id)->firstOrFail();
         $initialMarkers = [
             [
                 'position' => [
-                    'lat' => 6.36536,
-                    'lng' => 2.41833,
-                ],
-                'draggable' => false
-            ],
-            [
-                'position' => [
-                    'lat' => 7.36536,
-                    'lng' => 2.41833,
+                    'lat' => convertToDecimal($site->lat),
+                    'lng' => convertToDecimal($site->lng),
                 ],
                 'draggable' => false
             ],
         ];
-        // $site = Site::where('slug', $slug)->firstOrFail();
-        return Inertia::render('SiteShow', ['initialMarkers' => $initialMarkers]);
+        return Inertia::render('SiteShow', ['site' => $site, 'initialMarkers' => $initialMarkers]);
     }
 
     public function indexSpecies()
     {
-        $site = Site::where('slug', request()->slug)->first();
-        return Inertia::render('Specie');
+        $species = Specie::all()->append('animals_count');
+        return Inertia::render('Specie', ['species' => $species]);
     }
 }

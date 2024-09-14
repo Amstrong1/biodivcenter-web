@@ -124,12 +124,16 @@ class SpecieController extends Controller
 
     private function specieActions()
     {
-        $actions = [
-            'show' => "Voir",
-        ];
-
-        if (Auth::user()->role == 'admin') {
-            array_push($actions, ['edit' => "Modifier", 'delete' => "Supprimer"]);
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'supervisor') {
+            $actions = [
+                'show' => 'Voir',
+                'edit' => 'Modifier',
+                'delete' => "Supprimer"
+            ];
+        } else {
+            $actions = [
+                'show' => "Voir",
+            ];
         }
         return $actions;
     }

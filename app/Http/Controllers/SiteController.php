@@ -45,22 +45,28 @@ class SiteController extends Controller
         $data['ong_id'] = Auth::user()->ong_id;
         $data['type_habitat_id'] = $data['type_habitat'];
 
-        
-        try {
-            unset($data['type_habitat']);
-            if ($request->hasFile('logo')) {
-                $logo = $request->name . '_logo.' . $request->logo->extension();
-                $data['logo'] = $request->logo->storeAs('site', $logo, 'public');
-            }
 
-            if ($request->hasFile('photo')) {
-                $photo = $request->name . '_photo.' . $request->photo->extension();
-                $data['photo'] = $request->photo->storeAs('site', $photo, 'public');
-            }
-            $site->create($data);
-        } catch (\Exception $e) {
-            return response()->json($e);
+        // try {
+        unset($data['type_habitat']);
+        if ($request->hasFile('logo')) {
+            $logo = $request->name . '_logo.' . $request->logo->extension();
+            $data['logo'] = $request->logo->storeAs('site', $logo, 'public');
         }
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->name . '_photo.' . $request->photo->extension();
+            $data['photo'] = $request->photo->storeAs('site', $photo, 'public');
+        }
+        try {
+            $site->create($data);
+            // return response()->json([$site], 200);
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        // } catch (\Exception $e) {
+        //     dd($e);
+        //     return response()->json($e);
+        // }
     }
 
     /**
@@ -127,7 +133,11 @@ class SiteController extends Controller
             $site->photo = $this->updateImg($site->photo, $site->slug, $request->photo, 'site');
         }
         try {
-            $site->update($request->validated());
+            $data = $request->validated();
+            $data['type_habitat_id'] = $request->type_habitat;
+            unset($data['type_habitat']);
+
+            $site->update($data);
             return redirect()->route('sites.index');
         } catch (\Exception $e) {
             return back();
@@ -140,8 +150,12 @@ class SiteController extends Controller
     public function destroy(Site $site)
     {
         try {
-            Storage::delete($site->logo);
-            Storage::delete($site->photo);
+            if ($site->logo != null) {
+                Storage::delete($site->logo);
+            }
+            if ($site->photo != null) {
+                Storage::delete($site->photo);
+            }
 
             $site = $site->delete();
             return redirect()->route('sites.index');
@@ -167,15 +181,15 @@ class SiteController extends Controller
     {
         if (Auth::user()->role  == 'admin') {
             $actions = [
-            'show' => "Voir",
-            'delete' => "Supprimer",
-        ];
+                'show' => "Voir",
+                'delete' => "Supprimer",
+            ];
         } else {
             $actions = [
-            'show' => "Voir",
-            'edit' => "Modifier",
-            'delete' => "Supprimer",
-        ];
+                'show' => "Voir",
+                'edit' => "Modifier",
+                'delete' => "Supprimer",
+            ];
         }
         return $actions;
     }
@@ -202,8 +216,8 @@ class SiteController extends Controller
                 'title' => "Tracking",
                 'placeholder' => 'Entrez l\'adresse du site',
                 'field' => 'text',
-                'required' => true,
-                'required_on_edit' => true,
+                'required' => false,
+                'required_on_edit' => false,
             ],
             'area' => [
                 'title' => "Superficie",
@@ -231,8 +245,22 @@ class SiteController extends Controller
                 'title' => "Objectif secondaire",
                 'placeholder' => 'Entrez l\'objectif secondaire du site',
                 'field' => 'text',
-                'required' => true,
-                'required_on_edit' => true,
+                'required' => false,
+                'required_on_edit' => false,
+            ],
+            'lat' => [
+                'title' => "Latitude",
+                'placeholder' => 'Entrez la latitude du site',
+                'field' => 'text',
+                'required' => false,
+                'required_on_edit' => false,
+            ],
+            'lng' => [
+                'title' => "Longitude",
+                'placeholder' => 'Entrez la longitude du site',
+                'field' => 'text',
+                'required' => false,
+                'required_on_edit' => false,
             ],
             'logo' => [
                 'title' => "Logo",

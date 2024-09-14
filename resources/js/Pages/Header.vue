@@ -6,7 +6,7 @@
             </div>
             <div class="flex lg:gap-8 gap-4 items-center">
                 <a href="/guest/sites"
-                    :class="{ 'text-primary font-bold border-b-2 border-primary': $page.url === '/guest/sites' }" class="">
+                    :class="{ 'text-primary font-bold border-b-2 border-primary': $page.url === '/guest/sites' }">
                     Sites
                 </a>
                 <a href="/guest/species"

@@ -54,6 +54,7 @@ class UserController extends Controller
             $data['site_id'] = $request->site;
             $data['role'] = 'agent';
             $data['organization'] = Auth::user()->ong->name;
+            unset($data['site']);
         }
 
         if (Auth::user()->role == 'admin') {
@@ -63,51 +64,41 @@ class UserController extends Controller
                 'adminONG' => Ong::find($request->ong)->name,
                 default => 'MdT',
             };
+            unset($data['ong']);
         }
 
         if ($request->picture != null) {
-            try {
-                $name = $data['slug'] . '_pic.' . $request->picture->extension();
-                $data['picture'] = $request->picture->storeAs('user', $name, 'public');
-            } catch (\Exception $e) {
-                return response()->json($e);
-            }
+            $name = $data['slug'] . '_pic.' . $request->picture->extension();
+            $data['picture'] = $request->picture->storeAs('user', $name, 'public');
         }
 
-        try {
-            unset($data['ong']);
-            unset($data['site']);
-            $letters = '';
-            for ($i = 65; $i <= 90; $i++) {
-                $letters .= chr($i);
-            }
-            $numbers = '';
-            for ($i = 48; $i <= 57; $i++) {
-                $numbers .= chr($i);
-            }
-            $characters = $letters . $numbers;
-            $randomString = '';
-            for ($i = 0; $i < 6; $i++) {
-                $randomString .= $characters[rand(0, strlen($characters) - 1)];
-            }
-            $data['password'] = $randomString;
+        $letters = '';
+        for ($i = 65; $i <= 90; $i++) {
+            $letters .= chr($i);
+        }
+        $numbers = '';
+        for ($i = 48; $i <= 57; $i++) {
+            $numbers .= chr($i);
+        }
+        $characters = $letters . $numbers;
+        $randomString = '';
+        for ($i = 0; $i < 6; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        $data['password'] = $randomString;
 
-            $user = User::create($data);
-            Mail::to($user)->send(new UserPasswordMail($user, $randomString));
+        $user = User::create($data);
+        Mail::to($user)->send(new UserPasswordMail($user, $randomString));
 
-            if ($user->role == 'supervisor') {
-                SupervisorRight::create([
-                    'user_id' => $user->id,
-                    'configurations' => $request->configurations,
-                    'manage_ongs' => $request->manage_ongs,
-                    'manage_supervisors' => $request->manage_supervisors,
-                    'manage_partners' => $request->manage_partners
-                ]);
-            }
-            return redirect(route('users.index'));
-        } catch (\Exception $e) {
-            return back();
-        };
+        if ($user->role == 'supervisor') {
+            SupervisorRight::create([
+                'user_id' => $user->id,
+                'configurations' => $request->configurations,
+                'manage_ongs' => $request->manage_ongs,
+                'manage_supervisors' => $request->manage_supervisors,
+                'manage_partners' => $request->manage_partners
+            ]);
+        }
     }
 
     /**

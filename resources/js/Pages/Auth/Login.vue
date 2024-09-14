@@ -94,18 +94,18 @@ const submit = () => {
                 </form>
 
                 <div class="">
-                    <div class="grid grid-cols-6 items-center px-8 mt-6">
-                        <img src="/assets/img/evd.png" id="logo" alt="logo">
+                    <div class="grid grid-cols-6 items-center px-8 mt-6 gap-2">
+                        <img src="/assets/img/evd.png" id="evd" alt="evd">
+                        <img src="/assets/img/paas_t.png" id="paas_t" alt="paas_t">
+                        <img src="/assets/img/sos-savane.png" id="sos-savane" alt="sos-savane">
                         <img src="/assets/img/logo.png" id="logo" alt="logo">
-                        <img src="/assets/img/sos-savane.png" id="logo" alt="logo">
-                        <img src="/assets/img/logo.png" id="logo" alt="logo">
-                        <img src="/assets/img/dera.png" id="logo" alt="logo">
-                        <img src="/assets/img/ile-ecologique.jpg" id="logo" alt="logo">
-                        <img src="/assets/img/logo.png" id="logo" alt="logo">
-                        <img src="/assets/img/logo.png" id="logo" alt="logo">
-                        <img src="/assets/img/logo.png" id="logo" alt="logo">
+                        <img src="/assets/img/dera.png" id="dera" alt="dera">
+                        <img src="/assets/img/ile-ecologique.jpg" id="ile-ecologique" alt="ile-ecologique">
+                        <img src="/assets/img/pepiniere_d_afrique.jpg" id="pepiniere_d_afrique" alt="pepiniere_d_afrique">
                         <img src="/assets/img/logo.png" id="logo" alt="logo">
                         <img src="/assets/img/logo.png" id="logo" alt="logo">
+                        <img src="/assets/img/logo.png" id="logo" alt="logo">
+                        <img src="/assets/img/association_tin_ba.png" id="association_tin_ba" alt="association_tin_ba">
                         <img src="/assets/img/logo.png" id="logo" alt="logo">
                     </div>
                     <hr class="my-4 bg-black">

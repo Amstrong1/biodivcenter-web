@@ -52,7 +52,7 @@ class User extends Authenticatable
         return $this->belongsTo(Ong::class);
     }
 
-    public function sites(): BelongsTo
+    public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
     }

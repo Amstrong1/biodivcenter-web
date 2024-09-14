@@ -7,7 +7,7 @@ export default defineConfig({
         host: '0.0.0.0', // Écoute sur toutes les interfaces réseau
         port: 5173,      // Assurez-vous que ce port est ouvert
         hmr: {
-            host: '192.168.26.14', // Utilisez votre adresse IP locale ici
+            host: '192.168.192.162', // Utilisez votre adresse IP locale ici
         }
     },
     plugins: [

@@ -75,11 +75,10 @@ class Specie extends Model
         return $this->belongsToMany(Specie::class)->withPivot('latitude', 'longitude');
     }
 
-    public function getAnimalCountAttribute()
+    public function getAnimalsCountAttribute()
     {
         $animals_count = Animal::where('specie_id', $this->id)
             ->where('state', 'present')
-            ->where('deleted_at', null)
             ->count();
         return $animals_count;
     }

@@ -25,13 +25,15 @@ class UpdateSiteRequest extends FormRequest
             'type_habitat' => ['required', 'integer', 'exists:type_habitats,id'],
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-            'tracking' => ['required', 'string', 'max:255'],
+            'tracking' => ['nullable', 'string', 'max:255'],
             'area' => ['required', 'string', 'max:255'],
             'type' => ['required'],
             'main_goal' => ['required', 'string', 'max:255'],
             'second_goal' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
-            'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],            
+            'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],   
+            'lat' => ['nullable', 'string'],
+            'lng' => ['nullable', 'string'],         
         ];
     }
 }

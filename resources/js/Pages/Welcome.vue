@@ -19,12 +19,12 @@ import Footer from './Footer.vue';
             </div>
 
             <div class="flex justify-center gap-8">
-                <a href="">
+                <a href="/guest/sites">
                     <button class="rounded-lg text-white border border-primary bg-primary lg:px-8 md:px-4 px-2 py-2">
                         Découvrir nos sites
                     </button>
                 </a>
-                <a href="">
+                <a href="/guest/species">
                     <button class="rounded-lg text-primary border border-primary lg:px-8 md:px-4 px-2 py-2">
                         Découvrir nos espèces
                     </button>

@@ -1,15 +1,15 @@
-<template>
+<template class="mb-4">
     <div class="w-full p-2 overflow-hidden">
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data" name="form" id="form"
             class="text-sm">
 
-            <div class="form-group md:grid grid-cols-2 gap-2">
+            <div class="form-group md:grid grid-cols-2 gap-x-4">
                 <div v-for="(value, attr) in fields" :key="attr" :class="{
                     'hidden': value.hidden,
                     'form-group': true,
                     'required': value.required,
                     'col-span-2': value.colspan
-                }" class="mb-4">
+                }">
 
                     <!-- Label and Input Fields based on the type -->
                     <label v-if="value.field !== 'checkbox'" :for="attr" class="mb-1 block font-semibold text-xs">
@@ -17,7 +17,7 @@
                     </label>
 
                     <!-- model -->
-                    <template v-if="value.field === 'model'">
+                    <div class="mb-4" v-if="value.field === 'model'">
                         <select :id="attr" :name="attr"
                             class="outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
                             v-model="form[attr]">
@@ -26,10 +26,10 @@
                                 {{ item.name || item.title }}
                             </option>
                         </select>
-                    </template>
+                    </div>
 
                     <!-- Select -->
-                    <template v-else-if="value.field === 'select'">
+                    <div class="mb-4" v-else-if="value.field === 'select'">
                         <select :id="attr" :name="attr"
                             class="outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
                             v-model="form[attr]">
@@ -38,10 +38,10 @@
                                 {{ optionValue }}
                             </option>
                         </select>
-                    </template>
+                    </div>
 
                     <!-- Multiple Select -->
-                    <template v-else-if="value.field === 'multiple-select'">
+                    <div class="mb-4" v-else-if="value.field === 'multiple-select'">
                         <select :id="attr" :name="`${attr}[]`"
                             class="outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
                             multiple v-model="form[attr]">
@@ -50,17 +50,17 @@
                                 {{ item.name || item.title }}
                             </option>
                         </select>
-                    </template>
+                    </div>
 
                     <!-- Textarea / Richtext -->
-                    <template v-else-if="value.field === 'textarea' || value.field === 'richtext'">
+                    <div class="mb-4" v-else-if="value.field === 'textarea' || value.field === 'richtext'">
                         <textarea :id="attr" :name="attr" :placeholder="value.placeholder || ''"
                             class="outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
                             v-model="form[attr]"></textarea>
-                    </template>
+                    </div>
 
                     <!-- File -->
-                    <template v-else-if="value.field === 'file'">
+                    <div class="mb-4" v-else-if="value.field === 'file'">
                         <div class="rounded-lg bg-white p-2">
                             <label :for="attr" class="">
                                 <div class="flex items-center justify-between cursor-pointer text-xs px-2">
@@ -75,38 +75,40 @@
                         <div class="mt-3" v-if="filePreview">
                             <img :src="filePreview" alt="Prévisualisation de l'image" class="block h-24 rounded-lg" />
                         </div>
-                    </template>
+                    </div>
 
                     <!-- checkbox -->
-                    <template
-                        v-else-if="value.field === 'checkbox'">
-                        <div v-if="value.displayValue == null && Object.keys(form).some(key => key === value.watcher && form[key] === value.displayValue)" class="flex items-center">
+                    <div v-else-if="value.field === 'checkbox'">
+                        <div v-if="value.displayValue == null || Object.keys(form).some(key => key === value.watcher && form[key] === value.displayValue)"
+                            class="flex items-center mb-4">
                             <input type="checkbox" :id="attr" :name="attr" v-model="form[attr]" />
                             <label :for="attr" class="ml-2 text-xs">{{ value.title }}</label>
                         </div>
-                    </template>
+                    </div>
 
                     <!-- number -->
-                    <template v-else-if="value.field === 'number'">
+                    <div class="mb-4" v-else-if="value.field === 'number'">
                         <input type="number" :id="attr" :name="attr" :placeholder="value.placeholder || ''"
                             :step="value.step || 1"
                             class="block w-full rounded-lg border-0 placeholder:text-xs text-xs outline-none focus:ring-0 focus:border-0 focus:ring-offset-0"
                             v-model="form[attr]" />
-                    </template>
+                    </div>
 
                     <!-- Dynamic Input Fields -->
-                    <template v-else>
-                        <template v-if="!value.hidden">
+                    <div class="mb-4" v-else>
+                        <div v-if="!value.hidden">
                             <input :type="value.field" :id="attr" :name="attr" :placeholder="value.placeholder || ''"
                                 class="block w-full rounded-lg border-0 placeholder:text-xs text-xs outline-none focus:ring-0 focus:border-0 focus:ring-offset-0"
                                 v-model="form[attr]" />
-                        </template>
-                        <template v-else>
+                        </div>
+                        <div v-else>
                             <input :value="value.value" :id="attr" :name="attr" type="hidden" />
-                        </template>
-                    </template>
+                        </div>
+                    </div>
 
-                    <p v-if="errors[attr]" class="text-red-500 pl-2 pt-2 text-xs">{{ errors[attr][0] }}</p>
+                    <!-- <p v-if="errors[attr]" class="text-red-500 pl-2 pt-2 text-xs">{{ errors[attr][0] }}</p> -->
+
+                    <!-- <div class="text-red-500 pl-2 pt-2 text-xs" v-if="$page.errors.attr">{{ $page.errors.attr[0] }}</div> -->
                 </div>
             </div>
 
@@ -183,8 +185,8 @@ const submit = async () => {
             errors.value = error.response.data.errors
         }
     } finally {
-        fileName = null
-        filePreview = null
+        fileName.value = null
+        filePreview.value = null
         emit('formClosed')
         isLoading.value = false
     }

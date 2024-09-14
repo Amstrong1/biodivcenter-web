@@ -5,10 +5,6 @@ const markers = ref([]);
 let map = null;
 
 const props = defineProps({
-    sites: {
-        type: Array,
-        required: true
-    },
     initialMarkers: {
         type: Array,
         required: true
@@ -19,8 +15,8 @@ const props = defineProps({
 function initMap() {
     map = L.map('map', {
         center: {
-            lat: 28.626137,
-            lng: 79.821603,
+            lat: 10.9333,
+            lng: 1.11667,
         },
         zoom: 8
     });

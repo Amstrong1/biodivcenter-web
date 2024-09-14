@@ -36,6 +36,10 @@
             :class="route().current('type-habitats.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Type d'habitat
         </Link>
+        <Link :href="route('relocations.index')"
+            :class="route().current('relocations.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
+        Transferts
+        </Link>
     </div>
 </template>
 
