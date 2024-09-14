@@ -17,7 +17,7 @@ import Map from './Map.vue';
       <div class="lg:grid grid-cols-12 gap-8 my-12">
         <!-- Liste des sites -->
         <div class="col-span-8">
-          <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center justify-between mb-4">
             <span class="font-semibold tracking-wide">Listes des sites</span>
             <div class="relative">
               <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -69,9 +69,9 @@ import Map from './Map.vue';
 
         <!-- Carte des sites -->
         <div class="col-span-4 lg:my-0 mt-12">
-          <span class="font-semibold tracking-wide">Carte des sites</span>
-          <div class="mt-4">
-            <Map :sites="sites" :initialMarkers="$page.props.initialMarkers" />
+          <span class="font-semibold tracking-wide block mb-8">Carte des sites</span>
+          <div class="p-6 bg-[#f1f4ef] rounded-lg h-full">
+            <Map :initialMarkers="$page.props.initialMarkers" />
           </div>
         </div>
       </div>

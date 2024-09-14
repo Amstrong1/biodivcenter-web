@@ -52,7 +52,12 @@ class Site extends Model
         $siteSpecies = $this->siteSpecies()->get();
         
         foreach ($siteSpecies as $siteSpecie) {
-            $biodiv_value += $siteSpecie->biodiv_value;
+            $status_uicn = $siteSpecie->status_uicn;
+            $uicn_values = config('global.uicn_values');
+            
+            if (array_key_exists($status_uicn, $uicn_values)) {
+                $biodiv_value += $uicn_values[$status_uicn];
+            }
         }
         return $biodiv_value;
     }

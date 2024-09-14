@@ -46,7 +46,6 @@ class SiteController extends Controller
         $data['type_habitat_id'] = $data['type_habitat'];
 
 
-        // try {
         unset($data['type_habitat']);
         if ($request->hasFile('logo')) {
             $logo = $request->name . '_logo.' . $request->logo->extension();
@@ -57,16 +56,7 @@ class SiteController extends Controller
             $photo = $request->name . '_photo.' . $request->photo->extension();
             $data['photo'] = $request->photo->storeAs('site', $photo, 'public');
         }
-        try {
-            $site->create($data);
-            // return response()->json([$site], 200);
-        } catch (\Exception $e) {
-            dd($e);
-        }
-        // } catch (\Exception $e) {
-        //     dd($e);
-        //     return response()->json($e);
-        // }
+        $site->create($data);
     }
 
     /**
@@ -84,7 +74,18 @@ class SiteController extends Controller
                     'Type de conservation' => $site->type,
                     'Objectif principal' => $site->main_goal,
                     'Objectif secondaire' => $site->second_goal ?? 'Non renseigné',
+                    'Valeur biodiv' => $site->biodiv_value,
                 ]
+            ],
+        ];
+
+        $initialMarkers = [
+            [
+                'position' => [
+                    'lat' => convertToDecimal($site->lat),
+                    'lng' => convertToDecimal($site->lng),
+                ],
+                'draggable' => false
             ],
         ];
 
@@ -92,6 +93,8 @@ class SiteController extends Controller
             'site' => $site->append('type_habitat_name'),
             'my_fields' => $this->siteFields(),
             'infoCards' => $infoCards,
+            'initialMarkers' => $initialMarkers,
+            'species' => $site->siteSpecies,
         ]);
     }
 

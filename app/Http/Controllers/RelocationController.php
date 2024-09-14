@@ -30,14 +30,6 @@ class RelocationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreRelocationRequest $request)
@@ -62,8 +54,6 @@ class RelocationController extends Controller
         $newAnimal->origin = $animal->ong_id;
         $newAnimal->state = 'present';
         $newAnimal->save();
-
-        return redirect()->route('relocations.index');
     }
 
     /**
@@ -96,7 +86,6 @@ class RelocationController extends Controller
     {
         try {
             $relocation->update($request->validated());
-            return redirect()->route('relocations.index');
         } catch (\Throwable $th) {
             return redirect()->back();
         }
@@ -109,7 +98,6 @@ class RelocationController extends Controller
     {
         try {
             $relocation = $relocation->delete();
-            return redirect()->route('relocations.index');
         } catch (\Exception $e) {
             return redirect()->back();
         }
@@ -147,7 +135,7 @@ class RelocationController extends Controller
                 'field' => 'model',
                 'required' => true,
                 'required_on_edit' => true,
-                'options' => Animal::where('ong_id', Auth::user()->ong_id)->get('id', 'name'),
+                'options' => Animal::where('ong_id', Auth::user()->ong_id)->select('id', 'name')->get(),
             ],
             'ong_destination' => [
                 'title' => "ONG Destination",
@@ -173,19 +161,20 @@ class RelocationController extends Controller
                 'required_on_edit' => true,
                 'options' => Pen::where('state', 'Disponible')->get('id', 'numero'),
             ],
-            'comment' => [
-                'title' => "Commentaire",
-                'placeholder' => '',
-                'field' => 'textarea',
-                'required' => true,
-                'required_on_edit' => true,
-            ],
             'date_transfert' => [
                 'title' => "Date de transfert",
                 'placeholder' => '',
                 'field' => 'date',
                 'required' => true,
                 'required_on_edit' => true,
+            ],
+            'comment' => [
+                'title' => "Commentaire",
+                'placeholder' => '',
+                'field' => 'textarea',
+                'required' => false,
+                'required_on_edit' => false,
+                'colspan' => true
             ],
         ];
         return $fields;

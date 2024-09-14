@@ -18,7 +18,7 @@ class ObservationController extends Controller
     public function index()
     {
         if (Auth::user()->role == 'adminONG') {
-            $observations = Observation::where('ong_id', Auth::user()->ong_id)->get();
+            $observations = Observation::where('ong_id', Auth::user()->ong_id)->get()->append('site_name');
         } else {
             $observations = Observation::all();
         }
@@ -51,8 +51,19 @@ class ObservationController extends Controller
      */
     public function show(Observation $observation)
     {
+        $infoCards = [
+            [
+                'title' => 'Informations d\'identification',
+                'infoList' => [
+                    'Site' => $observation->site_name,
+                    'Objet' => $observation->subject,
+                    'Observation' => $observation->observation,
+                ]
+            ],
+        ];
+
         return Inertia::render('App/Observation/Show', [
-            'observation' => $observation,
+            'infoCards' => $infoCards,
             'my_fields' => $this->observationFields(),
         ]);
     }
@@ -100,7 +111,7 @@ class ObservationController extends Controller
         $columns = [
             'site_name' => 'Site',
             'subject' => 'Objet',
-            'description' => 'Description',
+            'observation' => 'Observation',
         ];
         return $columns;
     }

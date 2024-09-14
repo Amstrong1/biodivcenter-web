@@ -69,12 +69,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="map" class="w-full h-64"></div>
+    <div id="map"></div>
 </template>
 
 <style scoped>
 #map {
-    height: 400px;
+    height: 80%;
     width: 100%;
 }
 </style>

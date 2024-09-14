@@ -66,8 +66,30 @@ class SpecieController extends Controller
     public function show($specie)
     {
         $specie = Specie::find($specie);
+
+        $infoCards = [
+            [
+                'title' => 'Informations d\'identification',
+                'infoList' => [
+                    'Ordre' => $specie->order->name,
+                    'Classe' => $specie->classification->name,
+                    'Famille' => $specie->family->name,
+                    'Genre' => $specie->genus->name,
+                    'Regne' => $specie->reign->name,
+                    'Branche' => $specie->branch->name,
+                    'Statut UICN' => $specie->status_uicn_label,
+                    'Statut CITES' => $specie->status_cites,
+                    'Nom scientifique' => $specie->scientific_name,
+                    'Nom francais' => $specie->french_name,
+                    'Nom anglais' => $specie->english_name ?? 'Non défini',
+                    'Lien UICN' => $specie->uicn_link ?? 'Non défini',
+                    'Lien Inaturalist' => $specie->inaturalist_link ?? 'Non défini',
+                ]
+            ],
+        ];
+
         return Inertia::render('App/Specie/Show', [
-            'specie' => $specie->append('order_name')->append('classification_name')->append('family_name')->append('genus_name')->append('reign_name')->append('branch_name'),
+            'infoCards' => $infoCards,
             'my_fields' => $this->specieFields(),
         ]);
     }

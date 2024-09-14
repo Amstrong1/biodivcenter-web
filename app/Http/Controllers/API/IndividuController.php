@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Animal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class IndividuController extends Controller
@@ -36,7 +37,15 @@ class IndividuController extends Controller
             $data['photo'] = $request->photo->storeAs('animal', $name, 'public');
         }
         try {
-            Animal::create($data);
+            $animal = Animal::create($data);
+            if (!DB::table('site_specie')->where('site_id', $animal->site_id)->where('specie_id', $animal->specie_id)->exists()) {
+                DB::table('site_specie')->insert(
+                    [
+                        'site_id' => $animal->site_id,
+                        'specie_id' => $animal->specie_id,
+                    ]
+                );
+            }
             return response()->json(201);
         } catch (\Exception $e) {
             return response()->json($e);

@@ -22,7 +22,8 @@ class Specie extends Model
         'genus_name',
         'reign_name',
         'branch_name',
-        'site_name'
+        'site_name',
+        'status_uicn_label',
     ];
 
     public function branch(): BelongsTo
@@ -116,5 +117,13 @@ class Specie extends Model
     public function getSiteNameAttribute()
     {
         return $this->siteSpecies->site->name;
+    }
+
+    public function getStatusUicnLabelAttribute(){
+        foreach (config('global.uicn_labels') as $key => $value) {
+            if ($this->status_uicn == $key) {
+                return $value;
+            }
+        }
     }
 }

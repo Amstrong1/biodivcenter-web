@@ -18,6 +18,7 @@ use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\SpecieController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RelocationController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\TypeHabitatController;
 use App\Http\Controllers\ClassificationController;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('sites', SiteController::class);
     Route::resource('species', SpecieController::class);
     Route::resource('animals', AnimalController::class);
+    Route::resource('relocations', RelocationController::class);
     Route::resource('observations', ObservationController::class);
     Route::resource('type-habitats', TypeHabitatController::class);
 
