@@ -22,7 +22,7 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
-    protected $append = ['country', 'role_label'];
+    protected $append = ['country', 'role_label', 'ong_name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -68,5 +68,13 @@ class User extends Authenticatable
                 return $value;
             }
         }
+    }
+
+    public function getCountryAttribute(){
+        return $this->ong->country;
+    }
+
+    public function getOngNameAttribute(){
+        return $this->ong->name;
     }
 }

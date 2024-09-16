@@ -103,7 +103,8 @@ class Animal extends Model
         return $this->sanitaryState->last()->description ?? 'Non défini';
     }
 
-    public function getOngNameAttribute() {
+    public function getOngNameAttribute()
+    {
         return $this->ong->name;
     }
 }

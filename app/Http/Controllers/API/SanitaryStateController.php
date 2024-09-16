@@ -11,7 +11,6 @@ class SanitaryStateController extends Controller
     public function index($site_id)
     {
         $sanitaryStates = SanitaryState::where('site_id', $site_id)
-            ->select('id', 'label', 'animal_id')
             ->orderBy('id', 'desc')
             ->get()
             ->append('animal_name');

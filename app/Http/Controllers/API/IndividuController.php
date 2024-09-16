@@ -55,17 +55,19 @@ class IndividuController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        if ($request->hasFile('photo')) {
-            $name = $request['slug'] . '_animal.' . $request->photo->extension();
-            $data['photo'] = $request->photo->storeAs('animal', $name, 'public');
-        }
         try {
-            $animal = Animal::find($id);
-            if ($animal->photo) {
-                Storage::delete($animal->photo);
+            $animal = Animal::findOrFail($id);
+
+            if ($request->hasFile('photo')) {
+                $name = $animal['slug'] . '_animal.' . $request->photo->extension();
+                $data['photo'] = $request->photo->storeAs('animal', $name, 'public');
+
+                if ($animal->photo) {
+                    Storage::delete($animal->photo);
+                }
             }
             $animal->update($data);
-            return response()->json([$animal], 200);
+            return response()->json(200);
         } catch (\Exception $e) {
             return response()->json($e);
         }

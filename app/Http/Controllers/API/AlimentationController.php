@@ -38,7 +38,7 @@ class AlimentationController extends Controller
         try {
             $alimentation = Alimentation::find($id);
             $alimentation->update($request->all());
-            return response()->json([$alimentation], 200);
+            return response()->json(200);
         } catch (\Exception $e) {
             return response()->json($e);
         }
