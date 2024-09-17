@@ -15,12 +15,21 @@ class FamilyController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Family::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $families = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Family/Index', [
-            'families' => Family::where('id', '>', 1)->get(),
-                        'csrf' => csrf_token(),
-'my_actions' => $this->familyActions(),
+            'families' => $families,
+            'csrf' => csrf_token(),
+            'my_actions' => $this->familyActions(),
             'my_attributes' => $this->familyColumns(),
             'my_fields' => $this->familyFields(),
+            'filters' => request('search'),
         ]);
     }
 
@@ -48,8 +57,8 @@ class FamilyController extends Controller
     {
         return Inertia::render('App/Family/Edit', [
             'family' => $family,
-                        'csrf' => csrf_token(),
-'my_fields' => $this->familyFields(),
+            'csrf' => csrf_token(),
+            'my_fields' => $this->familyFields(),
         ]);
     }
 
@@ -110,4 +119,3 @@ class FamilyController extends Controller
         return $fields;
     }
 }
-

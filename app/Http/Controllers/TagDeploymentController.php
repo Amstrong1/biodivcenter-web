@@ -20,7 +20,7 @@ class TagDeploymentController extends Controller
     public function index()
     {
         return Inertia::render('App/TagDeployment/Index', [
-            'tags' => TagDeployment::where('ong_id', Auth::user()->ong_id)->get(),
+            'tags' => TagDeployment::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc')->paginate(),
             'csrf' => csrf_token(),
             'my_actions' => $this->tagActions(),
             'my_attributes' => $this->tagColumns(),

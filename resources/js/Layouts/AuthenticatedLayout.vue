@@ -58,6 +58,10 @@ const getPageTitle = () => {
         { pattern: /^\/relocations\/?$/, title: 'Liste des transferts' },
         { pattern: /relocations.*edit/, title: 'Modifier les informations du transfert' },
         { pattern: /relocations/, title: 'Voir les informations du transfert' },
+
+        { pattern: /^\/type-habitats\/?$/, title: 'Liste des types d\'habitat' },
+        { pattern: /type-habitats.*edit/, title: 'Modifier les informations du type d\'habitat' },
+        { pattern: /type-habitats/, title: 'Voir les informations du type d\'habitat' },
     ];
 
     for (const route of routes) {

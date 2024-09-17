@@ -1,8 +1,7 @@
 <template>
     <div class="overflow-hidden form-container px-2">
 
-        <form :action="route(`${pluralize(resourceType)}.update`, item.id)" method="POST" enctype="multipart/form-data"
-            name="form" id="form">
+        <form @submit.prevent="updateResource" enctype="multipart/form-data" name="form" id="form">
 
             <input type="hidden" name="_method" value="PUT">
             <input type="hidden" name="_token" :value="csrf">
@@ -19,10 +18,10 @@
                     <template v-if="value.field === 'model'">
                         <select :id="attr" :name="attr"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
-                            v-model="item[attr + '_id']">
+                            v-model="form[attr + '_id']">
                             <option value="">Sélectionner</option>
                             <option v-for="data in value.options" :key="data.id" :value="data.id"
-                                :selected="item[attr + '_id'] == data.id">
+                                :selected="form[attr + '_id'] == data.id">
                                 {{ data.name || data.title }}
                             </option>
                         </select>
@@ -30,11 +29,11 @@
 
                     <!-- Select -->
                     <template v-else-if="value.field === 'select'">
-                        <select v-model="item[attr]" :id="attr" :name="attr"
+                        <select v-model="form[attr]" :id="attr" :name="attr"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs">
                             <option value="">Sélectionner</option>
                             <option v-for="(optValue, key) in value.options" :key="key" :value="key"
-                                :selected="item[attr] == key">
+                                :selected="form[attr] == key">
                                 {{ optValue }}
                             </option>
                         </select>
@@ -42,10 +41,10 @@
 
                     <!-- Multiple Select -->
                     <template v-else-if="value.field === 'multiple-select'">
-                        <select v-model="item[attr]" :id="attr" :name="`${attr}[]`" multiple
+                        <select v-model="form[attr]" :id="attr" :name="`${attr}[]`" multiple
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs">
                             <option v-for="data in value.options" :key="data.id" :value="data.id"
-                                :selected="item[attr].includes(data.id)">
+                                :selected="form[attr].includes(data.id)">
                                 {{ data.name || data.title }}
                             </option>
                         </select>
@@ -53,9 +52,9 @@
 
                     <!-- Textarea / Richtext -->
                     <template v-else-if="value.field === 'textarea' || value.field === 'richtext'">
-                        <textarea :id="attr" :name="attr" v-model="item[attr]"
+                        <textarea :id="attr" :name="attr" v-model="form[attr]"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
-                            :placeholder="value.title">{{ item[attr] }}</textarea>
+                            :placeholder="value.title">{{ form[attr] }}</textarea>
                     </template>
 
 
@@ -76,8 +75,8 @@
                             <img :src="filePreview" alt="Prévisualisation de l'image" class="block h-24 rounded-lg" />
                         </div>
                         <div class="mt-3" v-else>
-                            <img v-if="item[attr] !== null" :alt="item[attr]" class="block h-24 rounded-lg"
-                                :src="`/storage/${item[attr]}`" />
+                            <img v-if="form[attr] !== null" :alt="form[attr]" class="block h-24 rounded-lg"
+                                :src="`/storage/${form[attr]}`" />
                             <span v-else class="text-xs italic">Aucune image</span>
                         </div>
                     </template>
@@ -85,29 +84,31 @@
                     <!-- Checkbox -->
                     <template v-else-if="value.field === 'checkbox'">
                         <div class="flex items-center">
-                            <input type="checkbox" :name="attr" :id="attr" :checked="item[attr] == 1"
-                                v-model="item[attr]">
+                            <input type="checkbox" :name="attr" :id="attr" :checked="form[attr] == 1"
+                                v-model="form[attr]">
                             <label :for="attr" class="ml-3 text-xs">{{ value.title }}</label>
                         </div>
                     </template>
 
                     <!-- Checkbox -->
                     <template v-else-if="value.field === 'number'">
-                        <input type="number" :id="attr" :name="item[attr]" :placeholder="value.placeholder || ''"
+                        <input type="number" :id="attr" :name="form[attr]" :placeholder="value.placeholder || ''"
                             :step="value.step || 1"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs placeholder:text-xs"
-                            v-model="item[attr]" />
+                            v-model="form[attr]" />
                     </template>
 
                     <!-- Dynamic Input Fields -->
                     <template v-else>
-                        <input :id="attr" v-model="item[attr]" :name="attr" :type="value.field"
+                        <input :id="attr" v-model="form[attr]" :name="attr" :type="value.field"
                             :placeholder="value.placeholder || ''"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs placeholder:text-xs" />
                     </template>
 
                     <!-- Error Messages -->
-                    <p v-if="errors[attr]" class="text-red-500 text-sm pl-2 pt-2">{{ errors[attr][0] }}</p>
+                    <p v-if="$page.props.errors[attr]" class="text-red-500 text-xs pl-2 pt-2">
+                        {{ $page.props.errors[attr] }} 
+                    </p>
                 </div>
             </div>
 
@@ -117,10 +118,8 @@
                 Annuler
                 </Link>
 
-                <button type="submit" :disabled="isLoading"
-                    class="w-full bg-primary py-2 rounded-lg text-white font-bold">
-                    <span v-if="isLoading">Chargement...</span>
-                    <span v-else>Modifier</span>
+                <button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full bg-primary py-2 rounded-lg text-white font-bold">
+                   Modifier
                 </button>
             </div>
         </form>
@@ -131,7 +130,7 @@
 import { ref } from 'vue'
 import pluralize from 'pluralize'
 import { defineProps } from 'vue'
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
 // Props passed to the component
 const props = defineProps({
@@ -153,13 +152,16 @@ const props = defineProps({
     }
 })
 
-const errors = ref([])
-const isLoading = ref(false)
+const form = ref({})
+
+form.value = { ...props.item }
+
 const fileName = ref(null)
 const filePreview = ref(null)
 
 const handleFileUpload = (event, attr) => {
     const file = event.target.files[0]
+    form.value[attr] = file
     if (file) {
         fileName.value = file.name;
 
@@ -170,4 +172,13 @@ const handleFileUpload = (event, attr) => {
         };
     }
 }
+
+const updateResource = () => {
+    const formData = useForm(form.value)
+
+    formData.put(route(`${pluralize(props.resourceType)}.update`, props.item.id))
+
+    fileName.value = null
+    filePreview.value = null
+};
 </script>

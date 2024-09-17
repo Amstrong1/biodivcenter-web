@@ -1,8 +1,19 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import { Head, usePage, router } from '@inertiajs/vue3';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
+import Pagination from '@/Components/Pagination.vue';
 
+const filter = ref(null);
+
+if (usePage().props.filters?.search) {
+    filter.value = usePage().props.filters.search;
+}
+
+watch(filter, (newFilter) => {
+    router.get(route('guest.species'), { search: newFilter }, { preserveState: true, replace: true });
+});
 </script>
 
 <template>
@@ -26,7 +37,7 @@ import Footer from './Footer.vue';
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <input type="text" id="custom-search-input"
+                        <input type="text" v-model="filter" id="custom-search-input"
                             class="border-0 block p-2 pl-10 w-80 text-sm form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg"
                             placeholder="Rechercher dans la liste">
                     </div>
@@ -45,7 +56,7 @@ import Footer from './Footer.vue';
                         </thead>
 
                         <tbody class="text-sm">
-                            <tr v-for="specie in $page.props.species" class="border-b border-slate-500">
+                            <tr v-for="specie in $page.props.species.data" class="border-b border-slate-500">
                                 <td class="px-6 py-4">{{ specie.french_name }}</td>
                                 <td class="px-6 py-4">{{ specie.scientific_name }}</td>
                                 <td class="px-6 py-4">{{ specie.animals_count }}</td>
@@ -54,6 +65,9 @@ import Footer from './Footer.vue';
                             </tr>
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <Pagination :links="$page.props.species.links" :current="$page.props.species.to"
+                        :total="$page.props.species.total" />
                 </div>
             </div>
         </main>

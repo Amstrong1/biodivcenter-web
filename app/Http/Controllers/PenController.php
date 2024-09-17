@@ -15,12 +15,21 @@ class PenController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Pen::orderBy('id', 'desc');
+        if ($search) {
+            $query->where('number', 'like', '%' . $search . '%');
+        }
+
+        $pens = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Pen/Index', [
-            'pens' => Pen::all(),
+            'pens' => $pens,
             'csrf' => csrf_token(),
             'my_actions' => $this->penActions(),
             'my_attributes' => $this->penColumns(),
             'my_fields' => $this->penFields(),
+            'filters' => request('search'),
         ]);
     }
 
@@ -100,8 +109,8 @@ class PenController extends Controller
     private function penFields()
     {
         $fields = [
-            'name' => [
-                'title' => "Ordre",
+            'number' => [
+                'title' => "Numero",
                 'placeholder' => '',
                 'field' => 'text',
                 'required' => true,

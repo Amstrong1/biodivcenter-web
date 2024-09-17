@@ -106,9 +106,9 @@
                         </div>
                     </div>
 
-                    <!-- <p v-if="errors[attr]" class="text-red-500 pl-2 pt-2 text-xs">{{ errors[attr][0] }}</p> -->
-
-                    <!-- <div class="text-red-500 pl-2 pt-2 text-xs" v-if="$page.errors.attr">{{ $page.errors.attr[0] }}</div> -->
+                    <p v-if="$page.props.errors[attr]" class="text-red-500 text-xs mb-2 -mt-2">
+                        {{ $page.props.errors[attr] }}
+                    </p>
                 </div>
             </div>
 
@@ -117,10 +117,9 @@
                     Annuler
                 </button>
 
-                <button type="submit" :disabled="isLoading"
+                <button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                     class="w-full bg-primary py-2 rounded-lg text-white font-bold text-xs">
-                    <span v-if="isLoading">Chargement...</span>
-                    <span v-else>Ajouter</span>
+                    Ajouter
                 </button>
             </div>
         </form>
@@ -132,6 +131,7 @@ import { ref } from 'vue'
 import pluralize from 'pluralize'
 import { defineProps } from 'vue'
 import { useForm } from '@inertiajs/vue3';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     resourceType: {
@@ -167,29 +167,20 @@ const handleFileUpload = (event, attr) => {
 }
 
 const submit = async () => {
-    isLoading.value = true
 
     const formData = useForm(form.value)
 
-    try {
-        errors.value = {}
-        formData.post(route(`${pluralize(props.resourceType)}.store`), {
-            onSuccess: () => {
-                Object.keys(form.value).forEach(key => {
-                    form.value[key] = null
-                })
-            },
-        })
-    } catch (error) {
-        if (error.response && error.response.status === 422) {
-            errors.value = error.response.data.errors
-        }
-    } finally {
-        fileName.value = null
-        filePreview.value = null
-        emit('formClosed')
-        isLoading.value = false
-    }
+    formData.post(route(`${pluralize(props.resourceType)}.store`), {
+        onSuccess: () => {
+            Object.keys(form.value).forEach(key => {
+                form.value[key] = null
+            })
+
+            fileName.value = null
+            filePreview.value = null
+            emit('formClosed')
+        },
+    })
 }
 
 const closeModal = () => {

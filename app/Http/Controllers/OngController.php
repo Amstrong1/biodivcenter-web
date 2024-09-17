@@ -17,18 +17,28 @@ class OngController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Ong::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $ongs = $query->paginate(15)->withQueryString();
+
         if (Auth::user()->role == 'admin') {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
+                'ongs' => $ongs,
                 'csrf' => csrf_token(),
                 'my_actions' => $this->ongActions(),
                 'my_attributes' => $this->ongColumns(),
                 'my_fields' => $this->ongFields(),
+                'filters' => request('search'),
             ]);
         } else {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
+                'ongs' => $ongs,
                 'my_attributes' => $this->ongColumns(),
+                'filters' => request('search'),
             ]);
         }
     }
@@ -53,7 +63,7 @@ class OngController extends Controller
 
         try {
             Ong::create($data);
-            return redirect()->route('ongs.index');
+            return to_route('ongs.index');
         } catch (\Exception $e) {
             return back();
         }
@@ -77,24 +87,19 @@ class OngController extends Controller
     public function update(UpdateOngRequest $request, Ong $ong)
     {
         if ($request->file('logo') != null) {
-            try {
+            if ($ong->logo != null) {
                 Storage::delete($ong->logo);
-                $name = $ong->slug . '_logo.' . $request->logo->extension();
-                $ong->logo = $request->logo->storeAs('ong', $name, 'public');
-            } catch (\Exception $e) {
-                return response()->json($e);
             }
+            $name = $ong->slug . '_logo.' . $request->logo->extension();
+            $ong->logo = $request->logo->storeAs('ong', $name, 'public');
         }
 
         $data = $request->validated();
         $data['mdt_membership'] = $request->mdt_membership == 0 ? false : true;
 
-        try {
-            $ong->update($data);
-            return redirect()->route('ongs.index');
-        } catch (\Exception $e) {
-            return back();
-        }
+        $ong->update($data);
+
+        return to_route('ongs.index');
     }
 
     /**
@@ -102,13 +107,11 @@ class OngController extends Controller
      */
     public function destroy(Ong $ong)
     {
-        try {
+        if ($ong->logo != null) {
             Storage::delete("storage/" . $ong->logo);
-            $ong = $ong->delete();
-            return redirect()->route('ongs.index');
-        } catch (\Exception $e) {
-            return back();
         }
+        $ong = $ong->delete();
+        return to_route('ongs.index');
     }
 
     private function ongColumns()

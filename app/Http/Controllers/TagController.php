@@ -16,12 +16,25 @@ class TagController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+
+        $query = Tag::where('ong_id', Auth::user()->ong_id)
+            ->orderBy('id', 'desc');
+
+        if ($search) {
+            $query->where('type', 'like', '%' . $search . '%')
+                ->orWhere('manufacturer', 'like', '%' . $search . '%');
+        }
+
+        $tags = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Tag/Index', [
-            'tags' => Tag::where('ong_id', Auth::user()->ong_id)->get(),
+            'tags' => $tags,
             'csrf' => csrf_token(),
             'my_actions' => $this->tagActions(),
             'my_attributes' => $this->tagColumns(),
             'my_fields' => $this->tagFields(),
+            'filters' => request('search'),
         ]);
     }
 

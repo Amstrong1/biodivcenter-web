@@ -15,12 +15,21 @@ class GenusController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Genus::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $genera = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Genus/Index', [
-            'genera' => Genus::where('id', '>', 1)->get(),
+            'genera' => $genera,
             'csrf' => csrf_token(),
             'my_actions' => $this->genusActions(),
             'my_attributes' => $this->genusColumns(),
             'my_fields' => $this->genusFields(),
+            'filters' => request('search'),
         ]);
     }
 

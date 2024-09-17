@@ -1,34 +1,23 @@
 <template>
-    <div class="py-12">
-        <div class="md:w-3/4 lg:w-2/3 mx-auto sm:px-6 lg:px-8">
-            <div class="bg-[#f1f4ef] overflow-hidden shadow-lg sm:rounded-lg p-10">
-                <span class="font-bold">Modifier type d'habitat</span>
-                <hr class="mt-2 mb-6 h-1 bg-black rounded-lg">
-                <FormsShow :item="typeHabitat" :fields="myFields" resourceType="type-habitat" />
+
+    <Head title="Type d'habitat" />
+    <AuthenticatedLayout>
+        <div class="mb-8 flex gap-8">
+            <div  v-for="(card, index) in $page.props.infoCards" :key="index">
+                <InfoCard :title="card.title" :infoList="card.infoList" />
             </div>
         </div>
-    </div>
+
+        <div class="mt-4 flex gap-2 text-sm">
+            <Link class="md:w-1/2 bg-[#ddf3d1] py-2 rounded-lg font-bold text-center" :href="route('type-habitats.index')">
+            Retour
+            </Link>
+        </div>
+    </AuthenticatedLayout>
 </template>
 
 <script setup>
-import FormsShow from '../../components/Forms/Show.vue'
-import { ref, onMounted } from 'vue'
-import { useRoute } from "vue-router"
-
-const router = useRoute()
-
-const typeHabitat = ref([])
-const myFields = ref({})
-
-const gettypeHabitat = async () => {
-    await axios.get(`/api/type-habitats/${router.params.id}`).then(response => {
-        const { typeHabitat: restypeHabitat, my_fields: resFields } = response.data
-        typeHabitat.value = restypeHabitat
-        myFields.value = resFields
-    })
-}
-
-onMounted(async () => {
-    await gettypeHabitat()
-})
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import InfoCard from '@/Components/Form/Show.vue'
+import { Head, Link } from '@inertiajs/vue3';
 </script>

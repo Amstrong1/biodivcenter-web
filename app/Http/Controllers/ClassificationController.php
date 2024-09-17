@@ -15,12 +15,21 @@ class ClassificationController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Classification::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $classifications = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Classification/Index', [
-            'classifications' => Classification::where('id', '>', 1)->get(),
+            'classifications' => $classifications,
             'csrf' => csrf_token(),
             'my_actions' => $this->classificationActions(),
             'my_attributes' => $this->classificationColumns(),
             'my_fields' => $this->classificationFields(),
+            'filters' => request('search'),
         ]);
     }
 

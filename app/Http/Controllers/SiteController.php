@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSiteRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateSiteRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SiteController extends Controller
 {
@@ -18,11 +19,24 @@ class SiteController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+
         if (Auth::user()->role == 'adminONG') {
-            $sites = Site::where('ong_id', Auth::user()->ong_id)->get()->append('type_habitat_name')->append('biodiv_value');
+            $query = Site::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc');
         } else {
-            $sites = Site::all()->append('type_habitat_name')->append('biodiv_value');
+            $query = Site::orderBy('id', 'desc');
         }
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('address', 'like', '%' . $search . '%');
+        }
+
+        $sites = $query->paginate(15)->withQueryString();
+
+        $sites->getCollection()->transform(function ($site) {
+            return $site->append('type_habitat_name')->append('biodiv_value');
+        });
 
         return Inertia::render('App/Site/Index', [
             'sites' => $sites,
@@ -30,6 +44,7 @@ class SiteController extends Controller
             'my_actions' => $this->siteActions(),
             'my_attributes' => $this->siteColumns(),
             'my_fields' => $this->siteFields(),
+            'filters' => request('search'),
         ]);
     }
 
@@ -91,7 +106,6 @@ class SiteController extends Controller
 
         return Inertia::render('App/Site/Show', [
             'site' => $site->append('type_habitat_name'),
-            'my_fields' => $this->siteFields(),
             'infoCards' => $infoCards,
             'initialMarkers' => $initialMarkers,
             'species' => $site->siteSpecies,
@@ -152,19 +166,14 @@ class SiteController extends Controller
      */
     public function destroy(Site $site)
     {
-        try {
-            if ($site->logo != null) {
-                Storage::delete($site->logo);
-            }
-            if ($site->photo != null) {
-                Storage::delete($site->photo);
-            }
-
-            $site = $site->delete();
-            return redirect()->route('sites.index');
-        } catch (\Exception $e) {
-            return back();
+        if ($site->logo != null) {
+            Storage::delete($site->logo);
         }
+        if ($site->photo != null) {
+            Storage::delete($site->photo);
+        }
+
+        $site = $site->delete();
     }
 
     private function siteColumns()

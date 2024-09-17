@@ -16,7 +16,7 @@ class SanitaryStateController extends Controller
     public function index()
     {
         return Inertia::render('App/SanitaryState/Index', [
-            'sanitaryStates' => SanitaryState::where('ong_id', Auth::user()->ong_id)->get(),
+            'sanitaryStates' => SanitaryState::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc')->paginate(),
             'csrf' => csrf_token(),
             'my_actions' => $this->sanitaryStateActions(),
             'my_attributes' => $this->sanitaryStateColumns(),

@@ -10,7 +10,9 @@
             <div class="w-1/3 bg-gray-100 p-8 rounded-lg shadow-md">
                 <span class="font-semibold tracking-wide">Carte du site</span>
                 <hr class="mt-2 mb-6 h-1 bg-black rounded-lg">
-                <Map :initialMarkers="$page.props.initialMarkers" />
+                <div class="h-[80%]">
+                    <Map :initialMarkers="$page.props.initialMarkers" />
+                </div>
             </div>
         </div>
 
@@ -30,12 +32,12 @@
                     </thead>
 
                     <tbody class="text-sm">
-                        <tr v-for="specie in $page.props.species" :key="specie.id"
+                        <tr v-if="$page.props.species.length !== 0" v-for="specie in $page.props.species" :key="specie.id"
                             class="border-b border-slate-500">
                             <!-- <td class="px-6 py-4">
-                    <img class="w-8 h-8 rounded-full"
-                      :src="site.photo != null ? `/storage/${specie.photo}` : '/assets/icon/user.png'" :alt="site.name" />
-                  </td> -->
+                                <img class="w-8 h-8 rounded-full"
+                                :src="site.photo != null ? `/storage/${specie.photo}` : '/assets/icon/user.png'" :alt="site.name" />
+                            </td> -->
                             <td class="px-6 py-4">{{ specie.french_name }}</td>
                             <td class="px-6 py-4">{{ specie.scientific_name }}</td>
                             <td class="px-6 py-4">{{ specie.status_cites }}</td>
@@ -46,6 +48,9 @@
                                 Voir
                                 </Link>
                             </td>
+                        </tr>
+                        <tr v-else>
+                            <td class="px-6 py-4 text-center text-xs" colspan="5">Aucune espece dans ce site</td>
                         </tr>
                     </tbody>
                 </table>
