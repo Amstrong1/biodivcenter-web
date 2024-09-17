@@ -1,10 +1,22 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
+import Pagination from '@/Components/Pagination.vue';
 import Map from './Map.vue';
 
+const filter = ref(null);
+
+if (usePage().props.filters?.search) {
+  filter.value = usePage().props.filters.search;
+}
+
+watch(filter, (newFilter) => {
+    router.get(route('guest.sites'), { search: newFilter }, { preserveState: true, replace: true });
+  });
 </script>
+
 
 <template>
 
@@ -13,12 +25,12 @@ import Map from './Map.vue';
   <div class="min-h-screen flex flex-col">
     <Header />
 
-    <main class="lg:px-28 px-12 grow">
+    <main class="lg:px-28 px-12 grow text-xs">
       <div class="lg:grid grid-cols-12 gap-8 my-12">
         <!-- Liste des sites -->
         <div class="col-span-8">
           <div class="flex items-center justify-between mb-4">
-            <span class="font-semibold tracking-wide">Listes des sites</span>
+            <span class="font-semibold tracking-wide text-base">Listes des sites</span>
             <div class="relative">
               <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-800" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
@@ -28,8 +40,8 @@ import Map from './Map.vue';
                     clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <input type="text" id="custom-search-input"
-                class="border-0 block p-2 pl-10 w-80 text-sm form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg"
+              <input type="text" v-model="filter"
+                class="border-0 block p-2 pl-10 w-80 text-xs form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg"
                 placeholder="Rechercher dans la liste" />
             </div>
           </div>
@@ -46,8 +58,8 @@ import Map from './Map.vue';
                 </tr>
               </thead>
 
-              <tbody class="text-sm">
-                <tr v-for="site in $page.props.sites" :key="site.slug" class="border-b border-slate-500">
+              <tbody class="text-xs">
+                <tr v-for="site in $page.props.sites.data" :key="site.slug" class="border-b border-slate-500">
                   <td class="px-6 py-4">
                     <img class="w-8 h-8 rounded-full"
                       :src="site.logo != null ? `/storage/${site.logo}` : '/assets/icon/user.png'" :alt="site.name" />
@@ -57,20 +69,23 @@ import Map from './Map.vue';
                   <td class="px-6 py-4">{{ site.address }}</td>
                   <td class="px-6 py-4">
                     <Link :href="route('guest.sites.show', site.id)"
-                      class="p-2 px-4 rounded-full bg-[#ddf3d1] text-primary font-bold">
+                      class="p-2 px-4 rounded-full bg-[#ddf3d1] text-primary text-xs font-bold">
                     Voir
                     </Link>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <!-- Pagination Links -->
+            <Pagination :links="$page.props.sites.links" :current="$page.props.sites.to"
+              :total="$page.props.sites.total" />
           </div>
         </div>
 
         <!-- Carte des sites -->
-        <div class="col-span-4 lg:my-0 mt-12">
-          <span class="font-semibold tracking-wide block mb-8">Carte des sites</span>
-          <div class="p-6 bg-[#f1f4ef] rounded-lg h-full">
+        <div class="col-span-4 sticky top-0 h-screen flex flex-col gap-8">
+          <span class="font-semibold tracking-wide text-base">Carte des sites</span>
+          <div class="box-border p-6 bg-[#f1f4ef] rounded-lg h-full">
             <Map :initialMarkers="$page.props.initialMarkers" />
           </div>
         </div>

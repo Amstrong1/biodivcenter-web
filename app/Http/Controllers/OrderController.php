@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function index()
     {
         return Inertia::render('App/Order/Index', [
-            'orders' => Order::where('id', '>', 1)->get(),
+            'orders' => Order::where('id', '>', 1)->orderBy('id', 'desc')->paginate(),
             'csrf' => csrf_token(),
             'my_actions' => $this->orderActions(),
             'my_attributes' => $this->orderColumns(),

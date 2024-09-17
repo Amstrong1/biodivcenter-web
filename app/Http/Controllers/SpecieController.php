@@ -22,12 +22,23 @@ class SpecieController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Specie::orderBy('id', 'desc');
+        if ($search) {
+            $query->where('scientific_name', 'like', '%' . $search . '%')
+                ->orWhere('french_name', 'like', '%' . $search . '%')
+                ->orWhere('english_name', 'like', '%' . $search . '%');
+        }
+
+        $species = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Specie/Index', [
-            'species' => Specie::all(),
+            'species' => $species,
             'csrf' => csrf_token(),
             'my_actions' => $this->specieActions(),
             'my_attributes' => $this->specieColumns(),
             'my_fields' => $this->specieFields(),
+            'filters' => request('search'),
         ]);
     }
 

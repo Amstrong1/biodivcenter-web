@@ -15,12 +15,21 @@ class ReignController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Reign::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $reigns = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Reign/Index', [
-            'reigns' => Reign::where('id', '>', 1)->get(),
+            'reigns' => $reigns,
             'csrf' => csrf_token(),
             'my_actions' => $this->reignActions(),
             'my_attributes' => $this->reignColumns(),
             'my_fields' => $this->reignFields(),
+            'filters' => request('search'),
         ]);
     }
 

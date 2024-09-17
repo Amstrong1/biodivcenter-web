@@ -16,12 +16,22 @@ class BranchController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Branch::where('id', '>', 1)->orderBy('id', 'desc');
+        
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $branches = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Branch/Index', [
-            'branches' => Branch::where('id', '>', 1)->get(),
+            'branches' => $branches,
             'csrf' => csrf_token(),
             'my_actions' => $this->branchActions(),
             'my_attributes' => $this->branchColumns(),
             'my_fields' => $this->branchFields(),
+            'filters' => request('search'),
         ]);
     }
 

@@ -21,7 +21,7 @@ class RelocationController extends Controller
     public function index()
     {
         return Inertia::render('App/Relocation/Index', [
-            'relocations' => Relocation::where('ong_origin_id', Auth::user()->ong_id)->orWhere('ong_destination_id', Auth::user()->ong_id)->get(),
+            'relocations' => Relocation::where('ong_origin_id', Auth::user()->ong_id)->orWhere('ong_destination_id', Auth::user()->ong_id)->orderBy('id', 'desc')->paginate(),
             'csrf' => csrf_token(),
             'my_actions' => $this->relocationActions(),
             'my_attributes' => $this->relocationColumns(),

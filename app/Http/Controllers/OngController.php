@@ -17,20 +17,31 @@ class OngController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Ong::where('id', '>', 1)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $ongs = $query->paginate(15)->withQueryString();
+
         if (Auth::user()->role == 'admin') {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
+                'ongs' => $ongs,
                 'csrf' => csrf_token(),
                 'my_actions' => $this->ongActions(),
                 'my_attributes' => $this->ongColumns(),
                 'my_fields' => $this->ongFields(),
+                'filters' => request('search'),
             ]);
         } else {
             return Inertia::render('App/Ong/Index', [
-                'ongs' => Ong::where('id', '!=', 1)->orderBy('id', 'desc')->get(),
+                'ongs' => $ongs,
                 'my_attributes' => $this->ongColumns(),
+                'filters' => request('search'),
             ]);
         }
+        
     }
 
     /**

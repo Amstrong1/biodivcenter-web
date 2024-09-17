@@ -17,10 +17,24 @@ class ObservationController extends Controller
      */
     public function index()
     {
+        $search = request('search');
         if (Auth::user()->role == 'adminONG') {
-            $observations = Observation::where('ong_id', Auth::user()->ong_id)->get()->append('site_name');
+            $query = Observation::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc');
         } else {
-            $observations = Observation::all();
+            $query = Observation::orderBy('id', 'desc');
+        }
+
+        if ($search) {
+            $query->where('subject', 'like', '%' . $search . '%')
+                ->orWhere('observation', 'like', '%' . $search . '%');
+        }
+
+        $observations = $query->paginate(15)->withQueryString();
+
+        if (Auth::user()->role == 'adminONG') {
+            $observations->getCollection()->transform(function ($observation) {
+                return $observation->append('site_name');
+            });
         }
 
         return Inertia::render('App/Observation/Index', [

@@ -22,6 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $search = request('search');
         $query = User::query();
 
         if (Auth::user()->role == 'adminONG') {
@@ -30,7 +31,15 @@ class UserController extends Controller
             $query->where('role', '!=', 'admin');
         }
 
-        $users = $query->orderBy('id', 'desc')->get()->append('role_label');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $users = $query->orderBy('id', 'desc')->paginate();
+
+        $users->getCollection()->transform(function ($user) {
+            return $user->append('role_label');
+        });
 
         return Inertia::render('App/User/Index', [
             'users' => $users,
@@ -38,6 +47,7 @@ class UserController extends Controller
             'my_actions' => $this->userActions(),
             'my_attributes' => $this->userColumns(),
             'my_fields' => $this->userFields(),
+            'filters' => request('search'),
         ]);
     }
 

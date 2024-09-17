@@ -15,12 +15,21 @@ class TypeHabitatController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = TypeHabitat::orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $typeHabitats = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/TypeHabitat/Index', [
-            'typeHabitats' => TypeHabitat::all(),
+            'typeHabitats' => $typeHabitats,
             'csrf' => csrf_token(),
             'my_actions' => $this->typeHabitatActions(),
             'my_attributes' => $this->typeHabitatColumns(),
             'my_fields' => $this->typeHabitatFields(),
+            'filters' => request('search'),
         ]);
     }
 

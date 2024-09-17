@@ -15,11 +15,21 @@ class AlimentationController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+        $query = Alimentation::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('address', 'like', '%' . $search . '%');
+        }
+
+        $alimentations = $query->paginate(15)->withQueryString();
+
         return Inertia::render('App/Alimentation/Index', [
-            'alimentations' => Alimentation::where('ong_id', Auth::user()->ong_id)->get(),
-                        'csrf' => csrf_token(),
-'my_actions' => $this->alimentationActions(),
+            'alimentations' => $alimentations,
+            'csrf' => csrf_token(),
+            'my_actions' => $this->alimentationActions(),
             'my_attributes' => $this->alimentationColumns(),
+            'filters' => request('search'),
         ]);
     }
 

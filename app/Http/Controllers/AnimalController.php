@@ -13,19 +13,30 @@ class AnimalController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+
         if (Auth::user()->role == 'adminONG') {
-            $animals = Animal::where('ong_id', Auth::user()->ong_id)->get()
-                ->append('specie_name')
-                ->append('site_name');
+            $query = Animal::where('ong_id', Auth::user()->ong_id)->orderBy('name', 'asc');
         } else {
-            $animals = Animal::all()->append('specie_name')->append('site_name');
+            $query = Animal::orderBy('id', 'desc');
         }
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $animals = $query->paginate(15)->withQueryString();
+
+        $animals->getCollection()->transform(function ($animal) {
+            return $animal->append('specie_name')->append('site_name');
+        });
 
         return Inertia::render('App/Animal/Index', [
             'animals' => $animals,
             'csrf' => csrf_token(),
             'my_actions' => $this->animalActions(),
             'my_attributes' => $this->animalColumns(),
+            'filters' => request('search'),
         ]);
     }
 

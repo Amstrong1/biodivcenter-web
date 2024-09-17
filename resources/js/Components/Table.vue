@@ -11,7 +11,7 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <input type="text" id="custom-search-input"
+                    <input type="text" id="custom-search-input" v-model="filter"
                         class="border-0 block p-2 pl-10 w-80 form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg text-xs"
                         placeholder="Rechercher dans la liste">
                 </div>
@@ -28,14 +28,14 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y">
-                        <tr v-if="resources.length === 0" class="border-b border-slate-500">
+                        <tr v-if="resources.data.length === 0" class="border-b border-slate-500">
                             <td :colspan="Object.keys(mattributes).length + 1"
                                 class="px-6 py-4 whitespace-nowrap text-center text-xs">
                                 Aucun Element
                             </td>
                         </tr>
 
-                        <tr v-for="resource in resources" class="">
+                        <tr v-for="resource in resources.data" class="">
                             <td v-for="(title, column) in mattributes" :key="column" class="px-4 py-3 text-xs">
                                 <template v-if="column === 'logo' || column === 'picture' || column === 'photo'">
                                     <a class="flex items-center justify-center text-sm hover:opacity-80">
@@ -72,24 +72,23 @@
                             </td>
 
                             <td v-if="mactions" class="px-4 py-3">
-                                <div class="flex items-center justify-start space-x-4 text-sm">
-                                    <Link  v-if="mactions.show"
-                                        :href="route(`${pluralize(type)}.show`, resource.id)"
-                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-bold">
-                                        Voir
+                                <div class="flex items-center justify-start space-x-4">
+                                    <Link v-if="mactions.show" :href="route(`${pluralize(type)}.show`, resource.id)"
+                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold">
+                                    Voir
                                     </Link>
-                                    <Link  v-if="mactions.edit"
-                                        :href="route(`${pluralize(type)}.edit`, resource.id)"
-                                        class="w-12 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-bold"
+                                    <Link v-if="mactions.edit" :href="route(`${pluralize(type)}.edit`, resource.id)"
+                                        class="w-14 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-semibold"
                                         aria-label="Edit">
-                                        Editer
+                                    Editer
                                     </Link>
-                                    <form v-if="mactions.delete" onsubmit="event.preventDefault(); deleteConfirmation(this);"
+                                    <form v-if="mactions.delete"
+                                        onsubmit="event.preventDefault(); deleteConfirmation(this);"
                                         :action="route(`${pluralize(type)}.destroy`, resource.id)" method="POST">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" :value="csrf">
                                         <button type="submit"
-                                            class="w-12 p-2 text-xs bg-red-200 text-red-600 rounded-full text-center font-bold"
+                                            class="w-12 p-2 text-xs bg-red-200 text-red-600 rounded-full text-center font-semibold"
                                             aria-label="Delete">
                                             Sup
                                         </button>
@@ -99,6 +98,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- Pagination Links -->
+                <Pagination :links="resources.links" :current="resources.to"
+                    :total="resources.total" />
             </div>
         </div>
     </div>
@@ -106,13 +108,14 @@
 
 <script setup>
 import { truncate, isString } from "lodash";
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage, router } from '@inertiajs/vue3';
 import pluralize from "pluralize";
-import { defineProps } from 'vue'
+import { defineProps, ref, watch } from 'vue'
+import Pagination from '@/Components/Pagination.vue';
 
-defineProps({
+const props = defineProps({
     resources: {
-        type: Array,
+        type: Object,
         required: true
     },
     mattributes: {
@@ -131,5 +134,15 @@ defineProps({
         required: true
     }
 })
+
+const filter = ref(null);
+
+if (usePage().props.filters?.search) {
+  filter.value = usePage().props.filters.search;
+}
+
+watch(filter, (newFilter) => {
+    router.get(route(`${pluralize(props.type)}.index`), { search: newFilter }, { preserveState: true, replace: true });
+  });
 
 </script>

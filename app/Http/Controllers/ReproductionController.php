@@ -18,7 +18,7 @@ class ReproductionController extends Controller
     public function index()
     {
         return Inertia::render('App/Reproduction/Index', [
-            'reproductions' => Reproduction::where('ong_id', Auth::user()->ong_id)->get(),
+            'reproductions' => Reproduction::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc')->paginate(),
             'csrf' => csrf_token(),
             'my_actions' => $this->reproductionActions(),
             'my_attributes' => $this->reproductionColumns(),

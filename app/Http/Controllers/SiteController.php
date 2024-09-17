@@ -18,11 +18,24 @@ class SiteController extends Controller
      */
     public function index()
     {
+        $search = request('search');
+
         if (Auth::user()->role == 'adminONG') {
-            $sites = Site::where('ong_id', Auth::user()->ong_id)->get()->append('type_habitat_name')->append('biodiv_value');
+            $query = Site::where('ong_id', Auth::user()->ong_id)->orderBy('id', 'desc');
         } else {
-            $sites = Site::all()->append('type_habitat_name')->append('biodiv_value');
+            $query = Site::orderBy('id', 'desc');
         }
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('address', 'like', '%' . $search . '%');
+        }
+
+        $sites = $query->paginate(15)->withQueryString();
+
+        $sites->getCollection()->transform(function ($site) {
+            return $site->append('type_habitat_name')->append('biodiv_value');
+        });
 
         return Inertia::render('App/Site/Index', [
             'sites' => $sites,
@@ -30,6 +43,7 @@ class SiteController extends Controller
             'my_actions' => $this->siteActions(),
             'my_attributes' => $this->siteColumns(),
             'my_fields' => $this->siteFields(),
+            'filters' => request('search'),
         ]);
     }
 
