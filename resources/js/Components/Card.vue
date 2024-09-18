@@ -17,7 +17,7 @@
 <script setup>
 defineProps({
     icon1: {
-        type: Object,
+        type: String,
         required: true,
     },
     title: {
@@ -29,7 +29,7 @@ defineProps({
         required: true,
     },
     icon2: {
-        type: Object,
+        type: String,
         required: true,
     }
 });

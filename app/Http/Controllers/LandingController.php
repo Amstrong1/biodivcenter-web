@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
-use App\Models\Specie;
 use Inertia\Inertia;
+use App\Models\Specie;
 
 class LandingController extends Controller
 {
     public function index()
-    {
+    { 
         return Inertia::render('Welcome');
     }
 

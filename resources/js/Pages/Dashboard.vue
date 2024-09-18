@@ -2,13 +2,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import SpeciesCard from '@/Components/Card.vue';
-// import BarChart from '../components/charts/index.vue';
 
-defineProps({
+const props = defineProps({
     speciesCount: Number,
     animalsCount: Number,
     siteCount: Number,
-    newBornCount: Number
+    newBornCount: Number,
 })
 </script>
 
@@ -29,6 +28,8 @@ defineProps({
                 <SpeciesCard icon1="paw-heart.png" title="Nbre de nouvelles naissances" :value="newBornCount ?? 0"
                     icon2="trend.png" />
             </div>
+
+            
         </div>
     </AuthenticatedLayout>
 </template>

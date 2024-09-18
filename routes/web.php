@@ -34,11 +34,12 @@ Route::get('/dashboard', function () {
     $animalsCount = Animal::count();
     $siteCount = Site::count();
     $newBornCount = Reproduction::whereRaw('ABS(TIMESTAMPDIFF(DAY, date, CURDATE())) < 1')->count();
+
     return Inertia::render('Dashboard', [
         'speciesCount' => $speciesCount,
         'animalsCount' => $animalsCount,
         'siteCount' => $siteCount,
-        'newBornCount' => $newBornCount
+        'newBornCount' => $newBornCount,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
