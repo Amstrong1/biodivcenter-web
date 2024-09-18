@@ -12,6 +12,7 @@
                         </svg>
                     </div>
                     <input type="text" id="custom-search-input" v-model="filter"
+                    <input type="text" id="custom-search-input" v-model="filter"
                         class="border-0 block p-2 pl-10 w-80 form-input placeholder:text-gray-800 bg-[#f1f4ef] rounded-lg text-xs"
                         placeholder="Rechercher dans la liste">
                 </div>
@@ -29,12 +30,14 @@
                     </thead>
                     <tbody class="divide-y">
                         <tr v-if="resources.data.length === 0" class="border-b border-slate-500">
+                        <tr v-if="resources.data.length === 0" class="border-b border-slate-500">
                             <td :colspan="Object.keys(mattributes).length + 1"
                                 class="px-6 py-4 whitespace-nowrap text-center text-xs">
                                 Aucun Element
                             </td>
                         </tr>
 
+                        <tr v-for="resource in resources.data" class="">
                         <tr v-for="resource in resources.data" class="">
                             <td v-for="(title, column) in mattributes" :key="column" class="px-4 py-3 text-xs">
                                 <template v-if="column === 'logo' || column === 'picture' || column === 'photo'">
@@ -76,10 +79,17 @@
                                     <Link v-if="mactions.show" :href="route(`${pluralize(type)}.show`, resource.id)"
                                         class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold">
                                     Voir
+                                <div class="flex items-center justify-start space-x-4">
+                                    <Link v-if="mactions.show" :href="route(`${pluralize(type)}.show`, resource.id)"
+                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold">
+                                    Voir
                                     </Link>
                                     <Link v-if="mactions.edit" :href="route(`${pluralize(type)}.edit`, resource.id)"
                                         class="w-14 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-semibold"
+                                    <Link v-if="mactions.edit" :href="route(`${pluralize(type)}.edit`, resource.id)"
+                                        class="w-14 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-semibold"
                                         aria-label="Edit">
+                                    Editer
                                     Editer
                                     </Link>
                                     <!-- <form v-if="mactions.delete" -->
@@ -111,9 +121,13 @@ import { Link, usePage, router, useForm } from '@inertiajs/vue3';
 import pluralize from "pluralize";
 import { defineProps, ref, watch } from 'vue'
 import Pagination from '@/Components/Pagination.vue';
+import { defineProps, ref, watch } from 'vue'
+import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
+const props = defineProps({
     resources: {
+        type: Object,
         type: Object,
         required: true
     },
