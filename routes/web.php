@@ -1,13 +1,10 @@
 <?php
 
-use App\Models\Site;
-use Inertia\Inertia;
-use App\Models\Animal;
-use App\Models\Specie;
-use App\Models\Reproduction;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GenusController;
 use App\Http\Controllers\OrderController;
@@ -28,22 +25,9 @@ Route::get('/guest/sites', [LandingController::class, 'indexSite'])->name('guest
 Route::get('/guest/sites/{id}', [LandingController::class, 'showSite'])->name('guest.sites.show');
 Route::get('/guest/species', [LandingController::class, 'indexSpecies'])->name('guest.species');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', HomeController::class)->name('dashboard');
 
-Route::get('/dashboard', function () {
-    $speciesCount = Specie::count();
-    $animalsCount = Animal::count();
-    $siteCount = Site::count();
-    $newBornCount = Reproduction::whereRaw('ABS(TIMESTAMPDIFF(DAY, date, CURDATE())) < 1')->count();
-
-    return Inertia::render('Dashboard', [
-        'speciesCount' => $speciesCount,
-        'animalsCount' => $animalsCount,
-        'siteCount' => $siteCount,
-        'newBornCount' => $newBornCount,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class);
     Route::resource('reigns', ReignController::class);
     Route::resource('genera', GenusController::class);
