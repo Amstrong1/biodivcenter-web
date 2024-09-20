@@ -70,4 +70,5 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InfoCard from '@/Components/Form/Show.vue'
 import { Head, Link } from '@inertiajs/vue3';
 import Map from '@/Pages/Map.vue';
+
 </script>

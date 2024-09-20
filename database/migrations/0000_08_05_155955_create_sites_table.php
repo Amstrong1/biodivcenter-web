@@ -17,13 +17,15 @@ return new class extends Migration
             $table->foreignId('type_habitat_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('address');
-            $table->text('tracking');
+            $table->string('tracking')->nullable()->change();
             $table->string('area');
             $table->string('type')->default('Mixte');
             $table->string('main_goal');
             $table->string('second_goal')->nullable();
             $table->string('photo')->nullable();
             $table->string('logo')->nullable();
+            $table->string('latitude');
+            $table->string('longitude');
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

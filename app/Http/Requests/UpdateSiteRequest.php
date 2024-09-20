@@ -22,7 +22,7 @@ class UpdateSiteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type_habitat' => ['required', 'integer', 'exists:type_habitats,id'],
+            'type_habitat_id' => ['required', 'integer', 'exists:type_habitats,id'],
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'tracking' => ['nullable', 'string', 'max:255'],
@@ -30,10 +30,10 @@ class UpdateSiteRequest extends FormRequest
             'type' => ['required'],
             'main_goal' => ['required', 'string', 'max:255'],
             'second_goal' => ['nullable', 'string', 'max:255'],
-            'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
-            'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],   
-            'lat' => ['nullable', 'string'],
-            'lng' => ['nullable', 'string'],         
+            // 'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'logo' => ['nullable', 'max:2048'],
+            'lat' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
+            'lat' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
         ];
     }
 }

@@ -131,7 +131,6 @@ import { ref } from 'vue'
 import pluralize from 'pluralize'
 import { defineProps } from 'vue'
 import { useForm } from '@inertiajs/vue3';
-import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     resourceType: {
@@ -145,9 +144,7 @@ const props = defineProps({
 })
 
 const form = ref({})
-const errors = ref([])
 const emit = defineEmits(['formClosed'])
-const isLoading = ref(false)
 
 const fileName = ref(null)
 const filePreview = ref(null)

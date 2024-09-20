@@ -87,6 +87,7 @@ watch(filter, (newFilter) => {
           <span class="font-semibold tracking-wide text-base">Carte des sites</span>
           <div class="box-border p-6 bg-[#f1f4ef] rounded-lg h-full">
             <Map :initialMarkers="$page.props.initialMarkers" />
+             <!-- {{ $page.props.initialMarkers }} -->
           </div>
         </div>
       </div>

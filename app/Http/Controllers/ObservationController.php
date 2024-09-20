@@ -52,11 +52,15 @@ class ObservationController extends Controller
     public function store(StoreObservationRequest $request)
     {
         $observation = new Observation();
-
         $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->name . '_photo.' . $request->photo->extension();
+            $data['photo'] = $request->photo->storeAs('observation', $photo, 'public');
+        }
+
         $data['slug'] = Str::slug($data['subject'], '_');
         $data['ong_id'] = Auth::user()->ong_id;
-        $data['site_id'] = $request['site'];
         $observation->create($data);
     }
 
@@ -100,6 +104,7 @@ class ObservationController extends Controller
     public function update(UpdateObservationRequest $request, Observation $observation)
     {
         try {
+
             $observation->update($request->validated());
             return redirect()->route('observations.index');
         } catch (\Exception $e) {
@@ -143,14 +148,14 @@ class ObservationController extends Controller
     private function observationFields()
     {
         $fields = [
-            'site' => [
+            'site_id' => [
                 'title' => "Site",
                 'placeholder' => 'Sélectionnez un site',
                 'field' => 'model',
                 'required' => true,
                 'required_on_edit' => true,
                 'colspan' => true,
-                'options' => Site::where('ong_id', Auth::user()->ong_id)->get('id', 'name'),
+                'options' => Site::where('ong_id', Auth::user()->ong_id)->select('id', 'name')->get(),
             ],
             'subject' => [
                 'title' => "Objet",
@@ -166,6 +171,14 @@ class ObservationController extends Controller
                 'field' => 'richtext',
                 'required' => true,
                 'required_on_edit' => true,
+                'colspan' => true
+            ],
+            'photo' => [
+                'title' => "Photo",
+                'placeholder' => 'Sélectionner une photo',
+                'field' => 'file',
+                'required' => false,
+                'required_on_edit' => false,
                 'colspan' => true
             ],
         ];

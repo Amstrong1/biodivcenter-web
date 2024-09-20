@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSiteRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateSiteRequest;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class SiteController extends Controller
 {
@@ -58,17 +57,14 @@ class SiteController extends Controller
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name'], '_');
         $data['ong_id'] = Auth::user()->ong_id;
-        $data['type_habitat_id'] = $data['type_habitat'];
 
-
-        unset($data['type_habitat']);
         if ($request->hasFile('logo')) {
-            $logo = $request->name . '_logo.' . $request->logo->extension();
+            $logo = $data['slug'] . '_logo.' . $request->logo->extension();
             $data['logo'] = $request->logo->storeAs('site', $logo, 'public');
         }
 
         if ($request->hasFile('photo')) {
-            $photo = $request->name . '_photo.' . $request->photo->extension();
+            $photo = $data['slug'] . '_photo.' . $request->photo->extension();
             $data['photo'] = $request->photo->storeAs('site', $photo, 'public');
         }
         $site->create($data);
@@ -124,40 +120,31 @@ class SiteController extends Controller
         ]);
     }
 
-    private function updateImg($old, $owner, $image, $folder)
-    {
-        try {
-            // Storage::delete($old);
-            $name = $owner . '_file.' . $image->extension();
-            $path = $image->storeAs($folder, $name, 'public');
-
-            return $path;
-        } catch (\Exception $e) {
-            return back();
-        }
-    }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateSiteRequest $request, Site $site)
-    {
-        if ($request->file('logo') != null) {
-            $site->logo = $this->updateImg($site->logo, $site->slug, $request->logo, 'site');
-        }
-
-        if ($request->file('photo') != null) {
-            $site->photo = $this->updateImg($site->photo, $site->slug, $request->photo, 'site');
-        }
+    { 
         try {
             $data = $request->validated();
-            $data['type_habitat_id'] = $request->type_habitat;
-            unset($data['type_habitat']);
+            
+            if ($request->file('logo') != null) {
+                try {
+                    if ($site->logo) {
+                        Storage::delete($site->logo);
+                    }
+                    $name = $site->slug . '_logo.' . $request->logo->extension();
+                    $data['logo'] = $request->logo->storeAs('site', $name, 'public');
+                } catch (\Exception $e) {
+                    return $e;
+                }
+            }
 
             $site->update($data);
+            // dd($site);
             return redirect()->route('sites.index');
         } catch (\Exception $e) {
-            return back();
+            return $e;
         }
     }
 
@@ -180,8 +167,8 @@ class SiteController extends Controller
     {
         $columns = [
             'logo' => '',
-            'type_habitat_name' => 'Type d\'habitat',
             'name' => 'Nom',
+            'type_habitat_name' => 'Type d\'habitat',
             'address' => 'Adresse',
             'biodiv_value' => 'Valeur Biodiv',
 
@@ -304,7 +291,7 @@ class SiteController extends Controller
         } else {
             $fields = array_merge(
                 [
-                    'type_habitat' => [
+                    'type_habitat_id' => [
                         'title' => "Type d'habitat",
                         'placeholder' => 'Selectionnez le type d\'habitat',
                         'field' => 'model',

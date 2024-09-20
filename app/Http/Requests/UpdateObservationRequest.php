@@ -11,7 +11,7 @@ class UpdateObservationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateObservationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'subject' => ['required', 'string', 'max:255'],
+            'observation' => ['required', 'string'],
+            'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }

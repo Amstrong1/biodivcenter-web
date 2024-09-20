@@ -49,6 +49,16 @@
                                         </div>
                                     </a>
                                 </template>
+                                <template v-else-if="column === 'name' || column === 'title' || column === 'label'">
+                                    <Link v-if="mactions && mactions.show"
+                                        :href="route(`${pluralize(type)}.show`, resource.id)"
+                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold whitespace-nowrap">
+                                    {{ resource[column] }}
+                                    </Link>
+                                    <span v-else>
+                                        {{ resource[column] }}
+                                    </span>
+                                </template>
                                 <template v-else-if="column === 'status'">
                                     <span :class="[
                                         'whitespace-nowrap px-2 py-1 font-semibold leading-tight rounded-full',
@@ -62,10 +72,10 @@
                                     </span>
                                 </template>
                                 <template v-else>
-                                    <span v-if="isString(resource[column]) && resource[column].length > 100">
+                                    <!-- <span v-if="isString(resource[column]) && resource[column].length > 100">
                                         {{ truncate(resource[column], 100) }}
-                                    </span>
-                                    <span v-else>
+                                    </span> -->
+                                    <span>
                                         {{ resource[column] }}
                                     </span>
                                 </template>
@@ -73,26 +83,16 @@
 
                             <td v-if="mactions" class="px-4 py-3">
                                 <div class="flex items-center justify-start space-x-4">
-                                    <Link v-if="mactions.show" :href="route(`${pluralize(type)}.show`, resource.id)"
-                                        class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold">
-                                    Voir
-                                    </Link>
                                     <Link v-if="mactions.edit" :href="route(`${pluralize(type)}.edit`, resource.id)"
                                         class="w-14 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-semibold"
                                         aria-label="Edit">
                                     Editer
                                     </Link>
-                                    <!-- <form v-if="mactions.delete" -->
-                                    <!-- onsubmit="event.preventDefault(); deleteConfirmation(this);"
-                                        :action="route(`${pluralize(type)}.destroy`, resource.id)" method="POST">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" :value="csrf"> -->
                                     <button v-if="mactions.delete" @click="deleteResource(resource.id)"
                                         class="w-12 p-2 text-xs bg-red-200 text-red-600 rounded-full text-center font-semibold"
                                         aria-label="Delete">
                                         Sup
                                     </button>
-                                    <!-- </form> -->
                                 </div>
                             </td>
                         </tr>

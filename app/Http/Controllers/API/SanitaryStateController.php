@@ -13,7 +13,8 @@ class SanitaryStateController extends Controller
         $sanitaryStates = SanitaryState::where('site_id', $site_id)
             ->orderBy('id', 'desc')
             ->get()
-            ->append('animal_name');
+            ->append('animal_name')
+            ->append('formated_date');
         return response()->json($sanitaryStates, 200);
     }
 

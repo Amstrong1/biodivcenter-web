@@ -18,10 +18,10 @@
                     <template v-if="value.field === 'model'">
                         <select :id="attr" :name="attr"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
-                            v-model="form[attr + '_id']">
+                            v-model="form[attr]">
                             <option value="">Sélectionner</option>
                             <option v-for="data in value.options" :key="data.id" :value="data.id"
-                                :selected="form[attr + '_id'] == data.id">
+                                :selected="form[attr] == data.id">
                                 {{ data.name || data.title }}
                             </option>
                         </select>
@@ -68,6 +68,7 @@
                                     <div v-else class="text-gray-500 px-2 border-l">Aucune image</div>
                                 </div>
                             </label>
+                            
                             <input v-show="false" :id="attr" :name="attr" type="file" accept="image/*"
                                 @change="handleFileUpload($event, attr)" />
                         </div>
@@ -90,10 +91,9 @@
                         </div>
                     </template>
 
-                    <!-- Checkbox -->
+                    <!-- Number -->
                     <template v-else-if="value.field === 'number'">
-                        <input type="number" :id="attr" :name="form[attr]" :placeholder="value.placeholder || ''"
-                            :step="value.step || 1"
+                        <input type="number" :id="attr" :placeholder="value.placeholder || ''" :step="value.step || 1"
                             class=" outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs placeholder:text-xs"
                             v-model="form[attr]" />
                     </template>
@@ -107,7 +107,7 @@
 
                     <!-- Error Messages -->
                     <p v-if="$page.props.errors[attr]" class="text-red-500 text-xs pl-2 pt-2">
-                        {{ $page.props.errors[attr] }} 
+                        {{ $page.props.errors[attr] }}
                     </p>
                 </div>
             </div>
@@ -118,8 +118,9 @@
                 Annuler
                 </Link>
 
-                <button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full bg-primary py-2 rounded-lg text-white font-bold">
-                   Modifier
+                <button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                    class="w-full bg-primary py-2 rounded-lg text-white font-bold">
+                    Modifier
                 </button>
             </div>
         </form>
@@ -130,7 +131,7 @@
 import { ref } from 'vue'
 import pluralize from 'pluralize'
 import { defineProps } from 'vue'
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 
 // Props passed to the component
 const props = defineProps({
@@ -162,6 +163,7 @@ const filePreview = ref(null)
 const handleFileUpload = (event, attr) => {
     const file = event.target.files[0]
     form.value[attr] = file
+    
     if (file) {
         fileName.value = file.name;
 
@@ -171,14 +173,24 @@ const handleFileUpload = (event, attr) => {
             filePreview.value = reader.result; // Stocker l'URL de prévisualisation
         };
     }
+
+    console.table(form.value)
 }
 
 const updateResource = () => {
     const formData = useForm(form.value)
 
-    formData.put(route(`${pluralize(props.resourceType)}.update`, props.item.id))
+    router.post(route(`${pluralize(props.resourceType)}.update`, props.item.id), {
+        _method: 'put',
+        ...formData,
+        onSuccess: () => {
+            Object.keys(form.value).forEach(key => {
+                form.value[key] = null
+            })
 
-    fileName.value = null
-    filePreview.value = null
+            fileName.value = null
+            filePreview.value = null
+        },
+    })
 };
 </script>

@@ -9,7 +9,7 @@ use App\Models\Specie;
 class LandingController extends Controller
 {
     public function index()
-    { 
+    {
         return Inertia::render('Welcome');
     }
 
@@ -17,7 +17,7 @@ class LandingController extends Controller
     {
         $search = request('search');
 
-        $query = Site::select('id', 'name', 'address', 'logo', 'ong_id')->orderBy('name', 'asc');
+        $query = Site::select('id', 'name', 'address', 'logo', 'ong_id', 'lat', 'lng')->orderBy('name', 'asc');
 
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%')
@@ -32,17 +32,16 @@ class LandingController extends Controller
         });
 
         $initialMarkers = [];
-        // foreach ($sites as $site) {
-        //     $initialMarkers = [
-        //         [
-        //             'position' => [
-        //                 'lat' => convertToDecimal($site->lat),
-        //                 'lng' => convertToDecimal($site->lng),
-        //             ],
-        //             'draggable' => false
-        //         ],
-        //     ];
-        // }
+        foreach ($sites as $site) {
+            $initialMarkers[] = [
+                'position' => [
+                    'lat' => convertToDecimal($site->lat),
+                    'lng' => convertToDecimal($site->lng),
+                ],
+                'draggable' => false
+
+            ];
+        }
 
         return Inertia::render('Site', [
             'sites' => $sites,
@@ -53,7 +52,23 @@ class LandingController extends Controller
 
     public function showSite($id)
     {
-        $site = Site::where('slug', $id)->firstOrFail();
+        $site = Site::where('id', $id)->firstOrFail();
+
+        $infoCards = [
+            [
+                'title' => 'Informations d\'identification',
+                'infoList' => [
+                    'Nom' => $site->name,
+                    'Adresse' => $site->address,
+                    'Superficie' => $site->area,
+                    'Type de conservation' => $site->type,
+                    'Objectif principal' => $site->main_goal,
+                    'Objectif secondaire' => $site->second_goal ?? 'Non renseigné',
+                    'Valeur biodiv' => $site->biodiv_value,
+                ]
+            ],
+        ];
+
         $initialMarkers = [
             [
                 'position' => [
@@ -63,7 +78,14 @@ class LandingController extends Controller
                 'draggable' => false
             ],
         ];
-        return Inertia::render('SiteShow', ['site' => $site, 'initialMarkers' => $initialMarkers]);
+        return Inertia::render(
+            'SiteShow',
+            [
+                'infoCards' => $infoCards,
+                'species' => $site->siteSpecies,
+                'initialMarkers' => $initialMarkers
+            ]
+        );
     }
 
     public function indexSpecies()

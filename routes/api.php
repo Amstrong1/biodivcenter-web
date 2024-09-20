@@ -5,7 +5,6 @@ use App\Models\User;
 
 use App\Models\Animal;
 use App\Models\Specie;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\IndividuController;
@@ -17,9 +16,10 @@ use App\Http\Controllers\API\SanitaryStateController as APISanitaryStateControll
 
 Route::get('/user/{id}', function () {
     $user = User::where('id', request('id'))
-        ->select('id', 'name', 'email', 'organization', 'contact', 'picture')
+        ->select('id', 'name', 'email', 'organization', 'contact', 'picture', 'role', 'ong_id')
         ->get()
-        ->append('role_label', 'country');
+        ->append('role_label')
+        ->append('country');
     return response()->json($user, 200);
 });
 

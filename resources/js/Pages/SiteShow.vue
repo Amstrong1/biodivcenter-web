@@ -1,7 +1,8 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
+import InfoCard from '@/Components/Form/Show.vue'
 import Map from './Map.vue';
 
 </script>
@@ -15,31 +16,18 @@ import Map from './Map.vue';
 
         <main class="lg:px-28 px-12 grow">
             <div class="lg:grid grid-cols-12 gap-8 my-12">
-                <div class="col-span-8 p-6 bg-[#f1f4ef] rounded-lg">
-                    <span class="font-semibold tracking-wide text-primary block w-full border-b border-primary pb-2">Nom
-                        du
-                        site</span>
-                    <div class="grid md:grid-cols-2 grid-cols-1 gap-4 pt-8">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
-                        <input class="w-full bg-white rounded-lg" type="text" readonly value="">
+                <div class="col-span-8">
+                    <div v-for="(card, index) in $page.props.infoCards" :key="index">
+                        <InfoCard :title="card.title" :infoList="card.infoList" />
                     </div>
                 </div>
 
                 <div class="col-span-4 lg:my-0 mt-12 bg-[#f1f4ef] rounded-lg p-6">
-                    <span
-                        class="font-semibold tracking-wide text-primary block w-full border-b border-primary pb-2">Carte
-                        des
-                        sites</span>
-                    <div class="mt-4">
-                        <Map :sites="sites" :initialMarkers="initialMarkers" />
+                    <span class="font-semibold tracking-wide text-primary block w-full pb-2">
+                        Carte du site
+                    </span>
+                    <div class="mt-4 h-[80%]">
+                        <Map :initialMarkers="$page.props.initialMarkers" />
                     </div>
                 </div>
             </div>
@@ -65,29 +53,24 @@ import Map from './Map.vue';
                 </div>
 
                 <div class="p-6 my-6 bg-[#f1f4ef] rounded-lg overflow-auto">
-                    <table class="w-full whitespace-no-wrap">
+                    <table class="w-full">
                         <thead>
                             <tr class="font-semibold tracking-wide border-b text-left bg-[#ddf3d1]">
-                                <th class="px-6 py-4">Nom du site</th>
-                                <th class="px-6 py-4">ONG Responsable</th>
-                                <th class="px-6 py-4">Pays</th>
-                                <th class="px-6 py-4">Commune</th>
+                                <th class="px-6 py-4">Nom francais</th>
+                                <th class="px-6 py-4">Nom scientifique</th>
+                                <th class="px-6 py-4">Nombre d'individus</th>
+                                <th class="px-6 py-4">Statut CITES</th>
+                                <th class="px-6 py-4">Statut UICN</th>
                             </tr>
                         </thead>
 
                         <tbody class="text-sm">
-                            <tr class="border-b border-slate-500">
-                                <td class="px-6 py-4">Site1</td>
-                                <td class="px-6 py-4">ONG1</td>
-                                <td class="px-6 py-4">Benin</td>
-                                <td class="px-6 py-4">Commune</td>
-                            </tr>
-
-                            <tr class="border-b border-slate-500">
-                                <td class="px-6 py-4">Site1</td>
-                                <td class="px-6 py-4">ONG1</td>
-                                <td class="px-6 py-4">Benin</td>
-                                <td class="px-6 py-4">Commune</td>
+                            <tr v-for="specie in $page.props.species" class="border-b border-slate-500">
+                                <td class="px-6 py-4">{{ specie.french_name }}</td>
+                                <td class="px-6 py-4">{{ specie.scientific_name }}</td>
+                                <td class="px-6 py-4">{{ specie.animals_count }}</td>
+                                <td class="px-6 py-4">{{ specie.status_cites }}</td>
+                                <td class="px-6 py-4">{{ specie.status_uicn }}</td>
                             </tr>
                         </tbody>
                     </table>

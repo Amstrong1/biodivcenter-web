@@ -22,7 +22,7 @@ class StoreSiteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type_habitat' => ['required', 'integer', 'exists:type_habitats,id'],
+            'type_habitat_id' => ['required', 'integer', 'exists:type_habitats,id'],
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'tracking' => ['nullable', 'string', 'max:255'],
@@ -33,7 +33,7 @@ class StoreSiteRequest extends FormRequest
             'lat' => ['nullable', 'string'],
             'lng' => ['nullable', 'string'],
             // 'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
-            'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],            
+            'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
         ];
     }
 }

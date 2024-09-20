@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained()->onDelete('cascade');
             $table->string('subject');
             $table->text('observation');
+            $table->string('photo')->nullable();
             $table->string('slug');
             $table->timestamps();
         });
