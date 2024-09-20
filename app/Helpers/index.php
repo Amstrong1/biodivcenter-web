@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 function convertToDecimal($coord) {
     // Vérifier si la coordonnée est au format Degrés Minutes Secondes (DMS)
     // Exemple de format DMS : 10° 46' 7.68" N ou S pour latitude, E ou W pour longitude
@@ -43,4 +47,41 @@ function convertToDecimal($coord) {
     // Retourner une erreur si le format est incorrect
     throw new Exception("Coordonnée invalide : $coord");
 }
+
+function importExcel(Request $request, $model)
+    {
+        // Valider le fichier Excel
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // Ouvrir le fichier Excel avec PhpSpreadsheet
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getRealPath());
+
+        // Sélectionner la première feuille du fichier Excel
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Parcourir les lignes du fichier Excel
+        foreach ($sheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false); // Itérer même les cellules vides
+
+            $data = [];
+            foreach ($cellIterator as $cell) {
+                $data[] = $cell->getValue(); // Lire la valeur de chaque cellule
+            }
+
+            // Vérifier que la ligne n'est pas vide avant d'insérer dans la base de données
+            if (!empty($data[0])) {
+                // Exemple : Insérer les données dans la table "users"
+                $model::create([
+                    'name' => $data[0],
+                    'slug' => Str::slug($data[0], '_'),
+                ]);
+            }
+        }
+
+        return true;
+    }
 

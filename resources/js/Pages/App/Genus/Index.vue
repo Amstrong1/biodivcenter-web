@@ -31,6 +31,30 @@
                         <hr class="mt-2 mb-6 h-1 bg-black rounded-lg">
                         <FormCreate @formClosed="closeModal" :fields="$page.props.my_fields" resourceType="genus"
                             :csrf="$page.props.csrf" />
+
+                            <div class="mt-8">
+                            <form @submit.prevent="submitFileForm" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="_token" :value="$page.props.csrf" />
+                                <span class="font-semibold text-xs">Importer des genres</span>
+                                <div class="rounded-lg bg-white p-2">
+                                    <label for="file">
+                                        <div class="flex items-center justify-between cursor-pointer text-xs px-2">
+                                            <div class="text-gray-500">Sélectionnez un fichier Excel</div>
+                                            <div v-if="fileName" class="text-gray-500 px-2 border-l">
+                                                {{ fileName }}
+                                            </div>
+                                            <div v-else class="text-gray-500 px-2 border-l">Aucun fichier</div>
+                                        </div>
+                                    </label>
+                                    <input v-show="false" type="file" id="file" name="file" accept="*.xlsx, *.xls"
+                                        @change="fileUpload($event)" />
+                                </div>
+
+                                <PrimaryButton class="text-xs font-semibold mt-2" type="submit">
+                                    Importer
+                                </PrimaryButton>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </transition>
@@ -44,12 +68,34 @@ import ElementsTable from '@/Components/Table.vue'
 import FormCreate from '@/Components/Form/Create.vue'
 import Navigation from '@/Components/Navigation.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const showModal = ref(false);
 
+const formFile = useForm({
+    file: '',
+})
+
+const fileName = ref('')
+
 const closeModal = () => {
     showModal.value = false
+}
+
+const submitFileForm = async () => {
+
+formFile.post(route('genera.import'), {
+    onSuccess: () => {
+
+        fileName.value = null
+        showModal.value = false
+    },
+})
+}
+
+const fileUpload = (event) => {
+    formFile.file = event.target.files[0]
+    fileName.value = event.target.files[0].name
 }
 </script>

@@ -106,7 +106,7 @@ class ReignController extends Controller
     {
         $fields = [
             'name' => [
-                'title' => "Ordre",
+                'title' => "Regne",
                 'placeholder' => '',
                 'field' => 'text',
                 'required' => true,

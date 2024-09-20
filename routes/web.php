@@ -3,9 +3,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
-use App\Http\Controllers\SiteController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\GenusController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReignController;
@@ -43,6 +44,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('relocations', RelocationController::class);
     Route::resource('observations', ObservationController::class);
     Route::resource('type-habitats', TypeHabitatController::class);
+
+    Route::post('import-orders', [ExcelController::class, 'importOrder'])->name('orders.import');
+    Route::post('import-reigns', [ExcelController::class, 'importReign'])->name('reigns.import');
+    Route::post('import-genera', [ExcelController::class, 'importGenus'])->name('genera.import');
+    Route::post('import-families', [ExcelController::class, 'importFamily'])->name('families.import');
+    Route::post('import-branches', [ExcelController::class, 'importBranch'])->name('branches.import');
+    Route::post('import-classifications', [ExcelController::class, 'importClassification'])->name('classifications.import');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
