@@ -25,29 +25,29 @@
                             <!-- <th class="px-6 py-4"></th> -->
                             <th class="px-6 py-4">Nom de l'espece</th>
                             <th class="px-6 py-4">Nom scientifique</th>
+                            <th class="px-6 py-4">Nombre individus</th>
                             <th class="px-6 py-4">Status CITES</th>
                             <th class="px-6 py-4">Status UICN</th>
-                            <th class="px-6 py-4">Action</th>
                         </tr>
                     </thead>
 
                     <tbody class="text-sm">
-                        <tr v-if="$page.props.species.length !== 0" v-for="specie in $page.props.species" :key="specie.id"
-                            class="border-b border-slate-500">
+                        <tr v-if="$page.props.species.length !== 0" v-for="specie in $page.props.species"
+                            :key="specie.id" class="border-b border-slate-500">
                             <!-- <td class="px-6 py-4">
                                 <img class="w-8 h-8 rounded-full"
                                 :src="site.photo != null ? `/storage/${specie.photo}` : '/assets/icon/user.png'" :alt="site.name" />
                             </td> -->
-                            <td class="px-6 py-4">{{ specie.french_name }}</td>
-                            <td class="px-6 py-4">{{ specie.scientific_name }}</td>
-                            <td class="px-6 py-4">{{ specie.status_cites }}</td>
-                            <td class="px-6 py-4">{{ specie.status_uicn }} </td>
                             <td class="px-6 py-4">
                                 <Link :href="route('species.show', specie.id)"
                                     class="p-2 px-4 rounded-full bg-[#ddf3d1] text-primary font-bold">
-                                Voir
+                                {{ specie.french_name }}
                                 </Link>
                             </td>
+                            <td class="px-6 py-4">{{ specie.scientific_name }}</td>
+                            <td class="px-6 py-4">{{ specie.animals_count }}</td>
+                            <td class="px-6 py-4">{{ specie.status_cites }}</td>
+                            <td class="px-6 py-4">{{ specie.status_uicn }} </td>
                         </tr>
                         <tr v-else>
                             <td class="px-6 py-4 text-center text-xs" colspan="5">Aucune espece dans ce site</td>

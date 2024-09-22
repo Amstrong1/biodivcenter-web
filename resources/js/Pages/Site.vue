@@ -54,25 +54,28 @@ watch(filter, (newFilter) => {
                   <th class="px-6 py-4">Nom du site</th>
                   <th class="px-6 py-4">Pays</th>
                   <th class="px-6 py-4">Adresse</th>
-                  <th class="px-6 py-4">Action</th>
                 </tr>
               </thead>
 
               <tbody class="text-xs">
-                <tr v-for="site in $page.props.sites.data" :key="site.slug" class="border-b border-slate-500">
+                <tr v-if="$page.props.sites.data.length === 0">
+                  <td class="px-6 py-4 text-xs text-center" colspan="5">
+                    Aucune données
+                  </td>
+                </tr>
+                <tr v-else v-for="site in $page.props.sites.data" :key="site.slug" class="border-b border-slate-500">
                   <td class="px-6 py-4">
                     <img class="w-8 h-8 rounded-full"
                       :src="site.logo != null ? `/storage/${site.logo}` : '/assets/icon/user.png'" :alt="site.name" />
                   </td>
-                  <td class="px-6 py-4">{{ site.name }}</td>
-                  <td class="px-6 py-4">{{ site.ong_country }}</td>
-                  <td class="px-6 py-4">{{ site.address }}</td>
                   <td class="px-6 py-4">
                     <Link :href="route('guest.sites.show', site.id)"
                       class="p-2 px-4 rounded-full bg-[#ddf3d1] text-primary text-xs font-bold">
-                    Voir
+                    {{ site.name }}
                     </Link>
                   </td>
+                  <td class="px-6 py-4">{{ site.ong_country }}</td>
+                  <td class="px-6 py-4">{{ site.address }}</td>
                 </tr>
               </tbody>
             </table>
@@ -87,7 +90,7 @@ watch(filter, (newFilter) => {
           <span class="font-semibold tracking-wide text-base">Carte des sites</span>
           <div class="box-border p-6 bg-[#f1f4ef] rounded-lg h-full">
             <Map :initialMarkers="$page.props.initialMarkers" />
-             <!-- {{ $page.props.initialMarkers }} -->
+            <!-- {{ $page.props.initialMarkers }} -->
           </div>
         </div>
       </div>

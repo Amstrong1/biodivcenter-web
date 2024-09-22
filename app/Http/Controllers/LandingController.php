@@ -82,7 +82,7 @@ class LandingController extends Controller
             'SiteShow',
             [
                 'infoCards' => $infoCards,
-                'species' => $site->siteSpecies,
+                'species' => $site->siteSpecies->append('animals_count'),
                 'initialMarkers' => $initialMarkers
             ]
         );

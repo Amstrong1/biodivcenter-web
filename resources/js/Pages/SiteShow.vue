@@ -65,7 +65,12 @@ import Map from './Map.vue';
                         </thead>
 
                         <tbody class="text-sm">
-                            <tr v-for="specie in $page.props.species" class="border-b border-slate-500">
+                            <tr v-if="$page.props.species.length === 0">
+                                <td class="px-6 py-4 text-xs text-center" colspan="5">
+                                    Aucune données
+                                </td>
+                            </tr>
+                            <tr v-else v-for="specie in $page.props.species" class="border-b border-slate-500">
                                 <td class="px-6 py-4">{{ specie.french_name }}</td>
                                 <td class="px-6 py-4">{{ specie.scientific_name }}</td>
                                 <td class="px-6 py-4">{{ specie.animals_count }}</td>

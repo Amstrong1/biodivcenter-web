@@ -16,7 +16,28 @@ const props = defineProps({
 
 onMounted(() => {
     const ctx = document.getElementById('myChart').getContext('2d');
+    const ctx2 = document.getElementById('myChart2').getContext('2d');
     new Chart(ctx, {
+        type: 'bar',
+        data: props.chartData,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false  // Cacher la légende si nécessaire
+                }
+            },
+            barPercentage: 0.2,
+            categoryPercentage: 1
+        }
+    });
+
+    new Chart(ctx2, {
         type: 'bar',
         data: props.chartData,
         options: {
@@ -68,6 +89,19 @@ onMounted(() => {
                         </select>
                     </div>
                     <canvas id="myChart"></canvas>
+                </div>
+
+                <div class="p-6 bg-[#f1f4ef] rounded-lg">
+                    <div class="flex items-center justify-between mb-10">
+                        <span class="font-semibold tracking-wide text-sm">Nombre d'individus par espèces</span>
+                        <select class="text-xs rounded-lg bg-[#ddf3d1] border-0 outline-none focus:ring-0 focus:border-0 focus:ring-offset-0">
+                            <option value="">Tout</option>
+                            <option value="">ONG1</option>
+                            <option value="">ONG2</option>
+                            <option value="">ONG3</option>
+                        </select>
+                    </div>
+                    <canvas id="myChart2"></canvas>
                 </div>
             </div>
         </div>

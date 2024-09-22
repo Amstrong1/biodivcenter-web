@@ -104,7 +104,7 @@ class SiteController extends Controller
             'site' => $site->append('type_habitat_name'),
             'infoCards' => $infoCards,
             'initialMarkers' => $initialMarkers,
-            'species' => $site->siteSpecies,
+            'species' => $site->siteSpecies->append('animals_count'),
         ]);
     }
 
