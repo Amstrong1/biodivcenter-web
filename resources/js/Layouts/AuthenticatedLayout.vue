@@ -62,6 +62,9 @@ const getPageTitle = () => {
         { pattern: /^\/type-habitats\/?$/, title: 'Liste des types d\'habitat' },
         { pattern: /type-habitats.*edit/, title: 'Modifier les informations du type d\'habitat' },
         { pattern: /type-habitats/, title: 'Voir les informations du type d\'habitat' },
+
+        { pattern: /^\/tags\/?$/, title: 'Liste des tags' },
+        { pattern: /tags.*edit/, title: 'Modifier les informations du tag' },
     ];
 
     for (const route of routes) {

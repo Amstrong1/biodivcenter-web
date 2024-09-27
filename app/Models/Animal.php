@@ -84,7 +84,7 @@ class Animal extends Model
 
     public function getParentAttribute()
     {
-        $parent = $this->animal_id !== null ? Animal::findOrFail($this->animal_id)->name : 'Non défini';
+        $parent = $this->parent_id !== null ? Animal::findOrFail($this->animal_id)->name : 'Non défini';
         return $parent;
     }
 

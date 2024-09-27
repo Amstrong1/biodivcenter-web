@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-start items-center bg-[#f1f4ef] rounded-xl py-2 px-4 text-xs gap-8 w-auto mb-4">
-        
-        <Link :href="route('reigns.index')" v-if="$page.props.auth.user.role !== 'adminONG'"
+
+        <!-- <Link :href="route('reigns.index')" v-if="$page.props.auth.user.role !== 'adminONG'"
             :class="route().current('reigns.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Règne
         </Link>
@@ -29,7 +29,8 @@
         <Link :href="route('genera.index')" v-if="$page.props.auth.user.role !== 'adminONG'"
             :class="route().current('genera.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Genre
-        </Link>
+        </Link> -->
+
         <Link :href="route('species.index')"
             :class="route().current('species.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Espèces
@@ -44,10 +45,15 @@
             :class="route().current('type-habitats.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Type d'habitat
         </Link>
-        
+
         <Link :href="route('relocations.index')"
             :class="route().current('relocations.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Transferts
+        </Link>
+
+        <Link :href="route('tags.index')" v-if="$page.props.auth.user.role == 'adminONG'"
+            :class="route().current('tags.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
+        Outil de suivi
         </Link>
     </div>
 </template>

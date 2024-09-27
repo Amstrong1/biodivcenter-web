@@ -19,7 +19,10 @@ class ReproductionController extends Controller
 
     public function show($id)
     {
-        $reproduction = Reproduction::find($id);
+        $reproduction = Reproduction::where('animal_id', $id)
+        ->orderBy('id', 'desc')
+        ->first()
+        ->append('animal_name');
         return response()->json($reproduction);
     }
 

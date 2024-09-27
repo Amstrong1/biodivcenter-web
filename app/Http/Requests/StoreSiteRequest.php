@@ -30,8 +30,8 @@ class StoreSiteRequest extends FormRequest
             'type' => ['required'],
             'main_goal' => ['required', 'string', 'max:255'],
             'second_goal' => ['nullable', 'string', 'max:255'],
-            'lat' => ['nullable', 'string'],
-            'lng' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'string'],
+            'longitude' => ['nullable', 'string'],
             // 'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
             'logo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
         ];

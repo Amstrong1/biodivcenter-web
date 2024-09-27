@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ong_id')->constrained()->onDelete('cascade');
             $table->foreignId('site_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('animal_id')->constrained()->onDelete('cascade');
             $table->string('phase');
             $table->integer('litter_size');

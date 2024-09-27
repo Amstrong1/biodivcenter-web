@@ -20,7 +20,11 @@ class SanitaryStateController extends Controller
 
     public function show($id)
     {
-        $sanitaryState = SanitaryState::find($id);
+        $sanitaryState = SanitaryState::where('animal_id', $id)
+            ->orderBy('id', 'desc')
+            ->first()
+            ->append('animal_name')
+            ->append('formated_date');
         return response()->json($sanitaryState);
     }
 

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Genus;
-use App\Models\Order;
-use App\Models\Reign;
-use App\Models\Branch;
-use App\Models\Family;
+// use App\Models\Genus;
+// use App\Models\Order;
+// use App\Models\Reign;
+// use App\Models\Branch;
+// use App\Models\Family;
 use App\Models\Specie;
 use Illuminate\Support\Str;
-use App\Models\Classification;
+// use App\Models\Classification;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSpecieRequest;
 use App\Http\Requests\UpdateSpecieRequest;
@@ -26,8 +26,7 @@ class SpecieController extends Controller
         $query = Specie::orderBy('id', 'desc');
         if ($search) {
             $query->where('scientific_name', 'like', '%' . $search . '%')
-                ->orWhere('french_name', 'like', '%' . $search . '%')
-                ->orWhere('english_name', 'like', '%' . $search . '%');
+                ->orWhere('french_name', 'like', '%' . $search . '%');
         }
 
         $species = $query->paginate(15)->withQueryString();
@@ -49,19 +48,19 @@ class SpecieController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($request['scientific_name'], '_');
-        $data['order_id'] = $request['order'];
-        $data['classification_id'] = $request['classification'];
-        $data['family_id'] = $request['family'];
-        $data['genus_id'] = $request['genus'];
-        $data['reign_id'] = $request['reign'];
-        $data['branch_id'] = $request['branch'];
+        // $data['order_id'] = $request['order'];
+        // $data['classification_id'] = $request['classification'];
+        // $data['family_id'] = $request['family'];
+        // $data['genus_id'] = $request['genus'];
+        // $data['reign_id'] = $request['reign'];
+        // $data['branch_id'] = $request['branch'];
 
-        unset($data['order']);
-        unset($data['classification']);
-        unset($data['family']);
-        unset($data['genus']);
-        unset($data['reign']);
-        unset($data['branch']);
+        // unset($data['order']);
+        // unset($data['classification']);
+        // unset($data['family']);
+        // unset($data['genus']);
+        // unset($data['reign']);
+        // unset($data['branch']);
 
         try {
             Specie::create($data);
@@ -82,17 +81,17 @@ class SpecieController extends Controller
             [
                 'title' => 'Informations d\'identification',
                 'infoList' => [
-                    'Ordre' => $specie->order->name,
-                    'Classe' => $specie->classification->name,
-                    'Famille' => $specie->family->name,
-                    'Genre' => $specie->genus->name,
-                    'Regne' => $specie->reign->name,
-                    'Branche' => $specie->branch->name,
-                    'Statut UICN' => $specie->status_uicn_label,
-                    'Statut CITES' => $specie->status_cites,
+                    // 'Ordre' => $specie->order->name,
+                    // 'Classe' => $specie->classification->name,
+                    // 'Famille' => $specie->family->name,
+                    // 'Genre' => $specie->genus->name,
+                    // 'Regne' => $specie->reign->name,
+                    // 'Branche' => $specie->branch->name,
                     'Nom scientifique' => $specie->scientific_name,
                     'Nom francais' => $specie->french_name,
-                    'Nom anglais' => $specie->english_name ?? 'Non défini',
+                    // 'Nom anglais' => $specie->english_name ?? 'Non défini',
+                    'Statut UICN' => $specie->status_uicn_label,
+                    'Statut CITES' => $specie->status_cites,
                     'Lien UICN' => $specie->uicn_link ?? 'Non défini',
                     'Lien Inaturalist' => $specie->inaturalist_link ?? 'Non défini',
                 ]
@@ -109,7 +108,13 @@ class SpecieController extends Controller
     {
         $specie = Specie::find($specie);
         return Inertia::render('App/Specie/Edit', [
-            'specie' => $specie->append('order_name')->append('classification_name')->append('family_name')->append('genus_name')->append('reign_name')->append('branch_name'),
+            'specie' => $specie,
+                // ->append('order_name')
+                // ->append('classification_name')
+                // ->append('family_name')
+                // ->append('genus_name')
+                // ->append('reign_name')
+                // ->append('branch_name'),
             'csrf' => csrf_token(),
             'my_fields' => $this->specieFields(),
         ]);
@@ -146,7 +151,11 @@ class SpecieController extends Controller
         $columns = [
             'scientific_name' => 'Nom scientifique',
             'french_name' => 'Nom Français',
-            'english_name' => 'Nom Anglais',
+            'status_uicn' => 'Statut UICN',
+            'status_cites' => 'Statut CITES',
+            'uicn_link' => 'Lien UICN',
+            'inaturalist_link' => 'Lien Inaturalist',
+            // 'english_name' => 'Nom Anglais',
         ];
 
         if (Auth::user()->role == 'adminONG') {
@@ -177,6 +186,20 @@ class SpecieController extends Controller
         $cites = config('global.cites_labels');
 
         $fields = [
+            'scientific_name' => [
+                'title' => "Nom scientifique",
+                'placeholder' => 'Saisissez le nom scientifique',
+                'field' => 'text',
+                'required' => true,
+                'required_on_edit' => true,
+            ],
+            'french_name' => [
+                'title' => "Nom francais",
+                'placeholder' => 'Saisissez le nom en francais',
+                'field' => 'text',
+                'required' => true,
+                'required_on_edit' => true,
+            ],
             'status_uicn' => [
                 'title' => "Statut UICN",
                 'placeholder' => 'Selectionnez une option',
@@ -193,27 +216,13 @@ class SpecieController extends Controller
                 'required_on_edit' => true,
                 'options' => $cites
             ],
-            'scientific_name' => [
-                'title' => "Nom scientifique",
-                'placeholder' => 'Saisissez le nom scientifique',
-                'field' => 'text',
-                'required' => true,
-                'required_on_edit' => true,
-            ],
-            'french_name' => [
-                'title' => "Nom francais",
-                'placeholder' => 'Saisissez le nom en francais',
-                'field' => 'text',
-                'required' => true,
-                'required_on_edit' => true,
-            ],
-            'english_name' => [
-                'title' => "Nom anglais",
-                'placeholder' => 'Saisissez le nom en anglais',
-                'field' => 'text',
-                'required' => true,
-                'required_on_edit' => true,
-            ],
+            // 'english_name' => [
+            //     'title' => "Nom anglais",
+            //     'placeholder' => 'Saisissez le nom en anglais',
+            //     'field' => 'text',
+            //     'required' => true,
+            //     'required_on_edit' => true,
+            // ],
             'uicn_link' => [
                 'title' => "Lien UICN (optionnel)",
                 'placeholder' => 'Saisissez le lien UICN',
@@ -230,93 +239,93 @@ class SpecieController extends Controller
             ],
         ];
 
-        if (request()->routeIs('species.show')) {
-            $fields = array_merge(
-                [
-                    'order_name' => [
-                        'title' => "Ordre",
-                        'field' => 'text',
-                    ],
-                    'classification_name' => [
-                        'title' => "Classification",
-                        'field' => 'text',
-                    ],
-                    'family_name' => [
-                        'title' => "Famille",
-                        'field' => 'text',
-                    ],
-                    'genus_name' => [
-                        'title' => "Genre",
-                        'field' => 'text',
-                    ],
-                    'reign_name' => [
-                        'title' => "Regne",
-                        'field' => 'text',
-                    ],
-                    'branch_name' => [
-                        'title' => "Branche",
-                        'field' => 'text',
-                    ],
-                ],
-                $fields
-            );
-        } else {
-            $fields = array_merge(
-                [
+        // if (request()->routeIs('species.show')) {
+        //     $fields = array_merge(
+        //         [
+        //             'order_name' => [
+        //                 'title' => "Ordre",
+        //                 'field' => 'text',
+        //             ],
+        //             'classification_name' => [
+        //                 'title' => "Classification",
+        //                 'field' => 'text',
+        //             ],
+        //             'family_name' => [
+        //                 'title' => "Famille",
+        //                 'field' => 'text',
+        //             ],
+        //             'genus_name' => [
+        //                 'title' => "Genre",
+        //                 'field' => 'text',
+        //             ],
+        //             'reign_name' => [
+        //                 'title' => "Regne",
+        //                 'field' => 'text',
+        //             ],
+        //             'branch_name' => [
+        //                 'title' => "Branche",
+        //                 'field' => 'text',
+        //             ],
+        //         ],
+        //         $fields
+        //     );
+        // } else {
+        //     $fields = array_merge(
+        //         [
 
-                    'order' => [
-                        'title' => "Ordre",
-                        'placeholder' => 'Sélectionnez un ordre',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Order::all('id', 'name'),
-                    ],
-                    'classification' => [
-                        'title' => "Classification",
-                        'placeholder' => 'Sélectionnez une classification',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Classification::all('id', 'name'),
-                    ],
-                    'family' => [
-                        'title' => "Famille",
-                        'placeholder' => 'Sélectionnez une famille',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Family::all('id', 'name'),
-                    ],
-                    'genus' => [
-                        'title' => "Genre",
-                        'placeholder' => 'Sélectionnez un genre',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Genus::all('id', 'name'),
-                    ],
-                    'reign' => [
-                        'title' => "Regne",
-                        'placeholder' => 'Sélectionnez un regne',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Reign::all('id', 'name'),
-                    ],
-                    'branch' => [
-                        'title' => "Branche",
-                        'placeholder' => 'Sélectionnez une branche',
-                        'field' => 'model',
-                        'required' => true,
-                        'required_on_edit' => true,
-                        'options' => Branch::all('id', 'name'),
-                    ],
+        //             'order' => [
+        //                 'title' => "Ordre",
+        //                 'placeholder' => 'Sélectionnez un ordre',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Order::all('id', 'name'),
+        //             ],
+        //             'classification' => [
+        //                 'title' => "Classification",
+        //                 'placeholder' => 'Sélectionnez une classification',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Classification::all('id', 'name'),
+        //             ],
+        //             'family' => [
+        //                 'title' => "Famille",
+        //                 'placeholder' => 'Sélectionnez une famille',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Family::all('id', 'name'),
+        //             ],
+        //             'genus' => [
+        //                 'title' => "Genre",
+        //                 'placeholder' => 'Sélectionnez un genre',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Genus::all('id', 'name'),
+        //             ],
+        //             'reign' => [
+        //                 'title' => "Regne",
+        //                 'placeholder' => 'Sélectionnez un regne',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Reign::all('id', 'name'),
+        //             ],
+        //             'branch' => [
+        //                 'title' => "Branche",
+        //                 'placeholder' => 'Sélectionnez une branche',
+        //                 'field' => 'model',
+        //                 'required' => true,
+        //                 'required_on_edit' => true,
+        //                 'options' => Branch::all('id', 'name'),
+        //             ],
 
-                ],
-                $fields
-            );
-        }
+        //         ],
+        //         $fields
+        //     );
+        // }
 
         return $fields;
     }

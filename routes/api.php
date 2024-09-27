@@ -23,6 +23,12 @@ Route::get('/user/{id}', function () {
     return response()->json($user, 200);
 });
 
+Route::post('/user/{id}', function () {
+    $user = User::find(request('id'));
+    $user->update(request()->all());
+    return response()->json($user, 200);
+});
+
 Route::post('/signin', [AuthController::class, 'signin']);
 
 Route::get('/individus/{site_id}', [IndividuController::class, 'index']);
@@ -63,7 +69,7 @@ Route::delete('/api-observation/{id}', [APIObservationController::class, 'destro
 
 Route::get('/species-list', function () {
     try {
-        return response()->json(Specie::all('id', 'french_name'), 200);
+        return response()->json(Specie::all(), 200);
     } catch (\Exception $e) {
         return response()->json($e);
     }

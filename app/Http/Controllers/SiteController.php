@@ -93,8 +93,8 @@ class SiteController extends Controller
         $initialMarkers = [
             [
                 'position' => [
-                    'lat' => convertToDecimal($site->lat),
-                    'lng' => convertToDecimal($site->lng),
+                    'lat' => convertToDecimal($site->latitude),
+                    'lng' => convertToDecimal($site->longitude),
                 ],
                 'draggable' => false
             ],
@@ -247,14 +247,14 @@ class SiteController extends Controller
                 'required' => false,
                 'required_on_edit' => false,
             ],
-            'lat' => [
+            'latitude' => [
                 'title' => "Latitude",
                 'placeholder' => 'Entrez la latitude du site',
                 'field' => 'text',
                 'required' => false,
                 'required_on_edit' => false,
             ],
-            'lng' => [
+            'longitude' => [
                 'title' => "Longitude",
                 'placeholder' => 'Entrez la longitude du site',
                 'field' => 'text',

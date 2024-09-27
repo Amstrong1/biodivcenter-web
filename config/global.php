@@ -26,6 +26,7 @@ return [
     ],
 
     'cites_labels' => [
+        'Pas Listé' => 'Pas Listé',
         'I' => 'Annexe I',
         'II' => 'Annexe II',
         'III' => 'Annexe III',

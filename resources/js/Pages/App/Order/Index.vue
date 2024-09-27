@@ -2,11 +2,11 @@
 
     <Head title="Ordres" />
     <AuthenticatedLayout>
-        <Navigation/>
+        <Navigation />
         <div>
             <div class="flex justify-between items-center">
                 <span class="font-bold">Liste des ordres</span>
-                <PrimaryButton @click="showModal = true"> 
+                <PrimaryButton @click="showModal = true">
                     <img src="/assets/icon/add.png" alt="">
                     Ajouter
                 </PrimaryButton>
@@ -32,7 +32,7 @@
                         <FormCreate @formClosed="closeModal" :fields="$page.props.my_fields" resourceType="order"
                             :csrf="$page.props.csrf" />
 
-                            <div class="mt-8">
+                        <div class="mt-8">
                             <form @submit.prevent="submitFileForm" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="_token" :value="$page.props.csrf" />
                                 <span class="font-semibold text-xs">Importer des ordres</span>
@@ -86,13 +86,13 @@ const closeModal = () => {
 
 const submitFileForm = async () => {
 
-formFile.post(route('orders.import'), {
-    onSuccess: () => {
+    formFile.post(route('orders.import'), {
+        onSuccess: () => {
 
-        fileName.value = null
-        showModal.value = false
-    },
-})
+            fileName.value = null
+            showModal.value = false
+        },
+    })
 }
 
 const fileUpload = (event) => {

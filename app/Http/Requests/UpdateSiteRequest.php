@@ -32,8 +32,8 @@ class UpdateSiteRequest extends FormRequest
             'second_goal' => ['nullable', 'string', 'max:255'],
             // 'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
             'logo' => ['nullable', 'max:2048'],
-            'lat' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
-            'lat' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
+            'latitude' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
+            'longitude' => ['required', 'regex:/^(\d{1,3})°\s*(\d{1,2})\'\s*([\d\.]+)"\s*([NSEW])$/'],
         ];
     }
 }

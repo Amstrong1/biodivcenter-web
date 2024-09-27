@@ -24,7 +24,8 @@
                             <th v-for="(title, column) in mattributes" :key="column" class="px-4 py-3">
                                 {{ title }}
                             </th>
-                            <th v-if="mactions && mactions.edit || mactions && mactions.delete" class="px-4 py-3">Actions</th>
+                            <th v-if="mactions && mactions.edit || mactions && mactions.delete" class="px-4 py-3">
+                                Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y">
@@ -59,14 +60,26 @@
                                         {{ resource[column] }}
                                     </span>
                                 </template>
-                                <template v-else-if="column === 'status'">
+                                <template v-else-if="column === 'status_uicn'">
                                     <span :class="[
                                         'whitespace-nowrap px-2 py-1 font-semibold leading-tight rounded-full',
-                                        resource[column] === 'Terminé' ?
-                                            'text-primary bg-[#ddf3d1]' :
-                                            resource[column] === 'En cours' ?
-                                                'text-gray-700 bg-gray-100' :
-                                                'text-gray-700 bg-yellow-100'
+                                        resource[column] === 'NE' ?
+                                            'text-black bg-white' :
+                                            resource[column] === 'DD' ?
+                                                'text-black bg-gray-700' :
+                                                resource[column] === 'LC' ?
+                                                    'text-black bg-primary' :
+                                                    resource[column] === 'NT' ?
+                                                        'text-black bg-pink-300' :
+                                                        resource[column] === 'VU' ?
+                                                            'text-black bg-yellow-800' :
+                                                            resource[column] === 'EN' ?
+                                                                'text-black bg-orange-800' :
+                                                                resource[column] === 'CR' ?
+                                                                    'text-black bg-red-800' :
+                                                                    resource[column] === 'EW' ?
+                                                                        'text-white bg-purple-800' :
+                                                                        'text-white bg-black'
                                     ]">
                                         {{ resource[column] }}
                                     </span>

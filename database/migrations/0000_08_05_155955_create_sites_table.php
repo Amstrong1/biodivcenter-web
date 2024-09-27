@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('type_habitat_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('address');
-            $table->string('tracking')->nullable()->change();
+            $table->string('tracking')->nullable();
             $table->string('area');
             $table->string('type')->default('Mixte');
             $table->string('main_goal');

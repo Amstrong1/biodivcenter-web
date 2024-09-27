@@ -19,7 +19,3 @@
 import IconLink from './Iconlink.vue'
 
 </script>
-
-<style scoped>
-/* Add any additional styles here */
-</style>

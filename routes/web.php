@@ -20,6 +20,7 @@ use App\Http\Controllers\RelocationController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\TypeHabitatController;
 use App\Http\Controllers\ClassificationController;
+use App\Http\Controllers\TagController;
 
 Route::get('/', [LandingController::class, 'index'])->name('guest.index');
 Route::get('/guest/sites', [LandingController::class, 'indexSite'])->name('guest.sites');
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('families', FamilyController::class);
     Route::resource('classifications', ClassificationController::class);
 
+    Route::resource('tags', TagController::class);
     Route::resource('ongs', OngController::class);
     Route::resource('users', UserController::class);
     Route::resource('sites', SiteController::class);
@@ -48,9 +50,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('import-orders', [ExcelController::class, 'importOrder'])->name('orders.import');
     Route::post('import-reigns', [ExcelController::class, 'importReign'])->name('reigns.import');
     Route::post('import-genera', [ExcelController::class, 'importGenus'])->name('genera.import');
+    Route::post('import-species', [ExcelController::class, 'importSpecie'])->name('species.import');
     Route::post('import-families', [ExcelController::class, 'importFamily'])->name('families.import');
     Route::post('import-branches', [ExcelController::class, 'importBranch'])->name('branches.import');
     Route::post('import-classifications', [ExcelController::class, 'importClassification'])->name('classifications.import');
+    Route::post('import-type-habitats', [ExcelController::class, 'importHabitatType'])->name('type-habitats.import');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

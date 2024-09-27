@@ -17,7 +17,7 @@ class LandingController extends Controller
     {
         $search = request('search');
 
-        $query = Site::select('id', 'name', 'address', 'logo', 'ong_id', 'lat', 'lng')->orderBy('name', 'asc');
+        $query = Site::select('id', 'name', 'address', 'logo', 'ong_id', 'latitude', 'longitude')->orderBy('name', 'asc');
 
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%')
@@ -35,8 +35,8 @@ class LandingController extends Controller
         foreach ($sites as $site) {
             $initialMarkers[] = [
                 'position' => [
-                    'lat' => convertToDecimal($site->lat),
-                    'lng' => convertToDecimal($site->lng),
+                    'lat' => convertToDecimal($site->latitude),
+                    'lng' => convertToDecimal($site->longitude),
                 ],
                 'draggable' => false
 
@@ -72,8 +72,8 @@ class LandingController extends Controller
         $initialMarkers = [
             [
                 'position' => [
-                    'lat' => convertToDecimal($site->lat),
-                    'lng' => convertToDecimal($site->lng),
+                    'lat' => convertToDecimal($site->latitude),
+                    'lng' => convertToDecimal($site->longitude),
                 ],
                 'draggable' => false
             ],

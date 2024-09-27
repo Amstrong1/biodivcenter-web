@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('state')->default('present');
             $table->string('origin')->nullable();
-            $table->foreignId('animal_id')->nullable()->references('id')->on('animals');
+            $table->foreignId('parent_id')->nullable()->constrained('animals');
             $table->string('slug');
             $table->timestamps();
         });

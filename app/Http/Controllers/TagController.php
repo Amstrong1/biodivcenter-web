@@ -54,7 +54,8 @@ class TagController extends Controller
         $tag = new Tag();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
+        $data['slug'] = Str::slug($data['type'], '_');
+        $data['ong_id'] = Auth::user()->ong_id;
         $tag->create($data);
     }
 
@@ -63,9 +64,20 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
+        $infoCards = [
+            [
+                'title' => 'Informations d\'identification',
+                'infoList' => [
+                    'Type' => $tag->type,
+                    'Fabricant' => $tag->manufacturer,
+                    'Modèle' => $tag->model,
+                    'Poids de conservation' => $tag->weight,
+                ]
+            ],
+        ];
         return Inertia::render('App/Tag/Show', [
             'my_fields' => $this->tagFields(),
-            'tag' => $tag,
+            'infoCards' => $infoCards,
         ]);
     }
 
@@ -89,8 +101,8 @@ class TagController extends Controller
         try {
             $tag->update($request->validated());
             return redirect()->route('tags.index');
-        } catch (\Throwable $th) {
-            redirect()->back();
+        } catch (\Exception $e) {
+            return $e;
         }
     }
 
@@ -101,9 +113,8 @@ class TagController extends Controller
     {
         try {
             $tag = $tag->delete();
-            return redirect()->route('tags.index');
         } catch (\Exception $e) {
-            return redirect()->back();
+            return $e;
         }
     }
 
