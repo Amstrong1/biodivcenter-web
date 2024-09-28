@@ -31,12 +31,12 @@ class IndividuController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
-        if ($request->hasFile('photo')) {
-            $name = $request['slug'] . '_animal.' . $request->photo->extension();
-            $data['photo'] = $request->photo->storeAs('animal', $name, 'public');
-        }
         try {
+            $data = $request->all();
+            if ($request->hasFile('photo')) {
+                $name = $request['slug'] . '_animal.' . $request->photo->extension();
+                $data['photo'] = $request->photo->storeAs('animal', $name, 'public');
+            }
             $animal = Animal::create($data);
             if (!DB::table('site_specie')->where('site_id', $animal->site_id)->where('specie_id', $animal->specie_id)->exists()) {
                 DB::table('site_specie')->insert(
