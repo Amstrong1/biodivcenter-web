@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ong;
 use App\Models\Genus;
 use App\Models\Order;
 use App\Models\Reign;
 use App\Models\Branch;
 use App\Models\Family;
 use App\Models\Specie;
+use App\Models\TypeHabitat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Classification;
-use App\Models\TypeHabitat;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ExcelController extends Controller
@@ -156,6 +157,47 @@ class ExcelController extends Controller
                 $type_habitat::create([
                     'name' => $data[0],
                     'description' => $data[1],
+                    'slug' => Str::slug($data[0], '_'),
+                ]);
+            }
+        }
+
+        return back();
+    }
+
+    public function importOng(Request $request)
+    {
+        $ong = new Ong();
+
+        // Valider le fichier Excel
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // Ouvrir le fichier Excel avec PhpSpreadsheet
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getRealPath());
+
+        // Sélectionner la première feuille du fichier Excel
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Parcourir les lignes du fichier Excel
+        foreach ($sheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false); // Itérer même les cellules vides
+
+            $data = [];
+            foreach ($cellIterator as $cell) {
+                $data[] = $cell->getValue(); // Lire la valeur de chaque cellule
+            }
+
+            // Vérifier que la ligne n'est pas vide avant d'insérer dans la base de données
+            if (!empty($data[0]) && !empty($data[1])) {
+                $ong::create([
+                    'name' => $data[0],
+                    'country' => $data[1],
+                    'siege_social' => $data[2],
+                    'mdt_membership' => $data[3] == 'Oui' ? true : false,
                     'slug' => Str::slug($data[0], '_'),
                 ]);
             }

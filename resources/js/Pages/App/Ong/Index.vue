@@ -5,7 +5,7 @@
         <div>
             <div class="flex justify-between items-center">
                 <span class="font-bold">Liste des ONG</span>
-                <PrimaryButton  v-if="$page.props.auth.user.role == 'admin'" @click="showModal = true"> 
+                <PrimaryButton v-if="$page.props.auth.user.role == 'admin'" @click="showModal = true">
                     <img src="/assets/icon/add.png" alt="">
                     Ajouter
                 </PrimaryButton>
@@ -30,6 +30,30 @@
                         <hr class="mt-2 mb-6 h-1 bg-black rounded-lg">
                         <FormCreate @formClosed="closeModal" :fields="$page.props.my_fields" resourceType="ong"
                             :csrf="$page.props.csrf" />
+
+                        <div class="mt-8">
+                            <form @submit.prevent="submitFileForm" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="_token" :value="$page.props.csrf" />
+                                <span class="font-semibold text-xs">Importer des ONG</span>
+                                <div class="rounded-lg bg-white p-2">
+                                    <label for="file">
+                                        <div class="flex items-center justify-between cursor-pointer text-xs px-2">
+                                            <div class="text-gray-500">Sélectionnez un fichier Excel</div>
+                                            <div v-if="fileName" class="text-gray-500 px-2 border-l">
+                                                {{ fileName }}
+                                            </div>
+                                            <div v-else class="text-gray-500 px-2 border-l">Aucun fichier</div>
+                                        </div>
+                                    </label>
+                                    <input v-show="false" type="file" id="file" name="file" accept="*.xlsx, *.xls"
+                                        @change="fileUpload($event)" />
+                                </div>
+
+                                <PrimaryButton class="text-xs font-semibold mt-2" type="submit">
+                                    Importer
+                                </PrimaryButton>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </transition>
@@ -43,12 +67,34 @@ import { ref } from 'vue'
 import ElementsTable from '@/Components/Table.vue'
 import FormCreate from '@/Components/Form/Create.vue'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const showModal = ref(false);
 
 const closeModal = () => {
     showModal.value = false
+}
+
+const formFile = useForm({
+    file: '',
+})
+
+const fileName = ref('')
+
+const submitFileForm = async () => {
+
+    formFile.post(route('ongs.import'), {
+        onSuccess: () => {
+
+            fileName.value = null
+            showModal.value = false
+        },
+    })
+}
+
+const fileUpload = (event) => {
+    formFile.file = event.target.files[0]
+    fileName.value = event.target.files[0].name
 }
 </script>

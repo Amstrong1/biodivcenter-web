@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('import-branches', [ExcelController::class, 'importBranch'])->name('branches.import');
     Route::post('import-classifications', [ExcelController::class, 'importClassification'])->name('classifications.import');
     Route::post('import-type-habitats', [ExcelController::class, 'importHabitatType'])->name('type-habitats.import');
+    Route::post('import-ongs', [ExcelController::class, 'importOng'])->name('ongs.import');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

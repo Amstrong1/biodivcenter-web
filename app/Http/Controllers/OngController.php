@@ -100,7 +100,7 @@ class OngController extends Controller
 
         $ong->update($data);
 
-        return to_route('ongs.index');
+        return redirect()->route('ongs.index');
     }
 
     /**

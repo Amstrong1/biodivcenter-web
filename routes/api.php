@@ -26,6 +26,7 @@ Route::get('/user/{id}', function () {
 Route::post('/user/{id}', function () {
     $user = User::find(request('id'));
     $user->update(request()->all());
+    $user = $user->append('role_label')->append('country');
     return response()->json($user, 200);
 });
 
