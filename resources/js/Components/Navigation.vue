@@ -31,7 +31,7 @@
         Genre
         </Link> -->
 
-        <Link :href="route('species.index')"
+        <Link :href="route('species.index')" v-if="$page.props.auth.user.role !== 'adminONG'"
             :class="route().current('species.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Espèces
         </Link>

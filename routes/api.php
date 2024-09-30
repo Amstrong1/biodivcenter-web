@@ -1,33 +1,21 @@
 <?php
 
 use App\Models\Pen;
-use App\Models\User;
-
 use App\Models\Animal;
 use App\Models\Specie;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\IndividuController;
-use App\Http\Controllers\API\RelocationController as APIRelocationController;
-use App\Http\Controllers\API\ObservationController as APIObservationController;
-use App\Http\Controllers\API\AlimentationController as APIAlimentationController;
-use App\Http\Controllers\API\ReproductionController as APIReproductionController;
-use App\Http\Controllers\API\SanitaryStateController as APISanitaryStateController;
+use App\Http\Controllers\API\RelocationController;
+use App\Http\Controllers\API\ObservationController;
+use App\Http\Controllers\API\AlimentationController;
+use App\Http\Controllers\API\ReproductionController;
+use App\Http\Controllers\API\SanitaryStateController;
 
-Route::get('/user/{id}', function () {
-    $user = User::where('id', request('id'))
-        ->select('id', 'name', 'email', 'organization', 'contact', 'picture', 'role', 'ong_id')
-        ->get()
-        ->append('role_label')
-        ->append('country');
-    return response()->json($user, 200);
-});
+Route::get('/user/{id}', [UserController::class, 'show']);
 
-Route::post('/user/{id}', function () {
-    $user = User::find(request('id'));
-    $user->update(request()->all());
-    return response()->json($user, 200);
-});
+Route::post('/user/{id}', [UserController::class, 'update']);
 
 Route::post('/signin', [AuthController::class, 'signin']);
 
@@ -37,35 +25,35 @@ Route::get('/individu/{id}', [IndividuController::class, 'show']);
 Route::post('/individu/{id}', [IndividuController::class, 'update']);
 Route::delete('/individu/{id}', [IndividuController::class, 'destroy']);
 
-Route::get('/api-sanitary-states/{site_id}', [APISanitaryStateController::class, 'index']);
-Route::post('/api-sanitary-state', [APISanitaryStateController::class, 'store']);
-Route::get('/api-sanitary-state/{id}', [APISanitaryStateController::class, 'show']);
-Route::post('/api-sanitary-state/{id}', [APISanitaryStateController::class, 'update']);
-Route::delete('/api-sanitary-state/{id}', [APISanitaryStateController::class, 'destroy']);
+Route::get('/api-sanitary-states/{site_id}', [SanitaryStateController::class, 'index']);
+Route::post('/api-sanitary-state', [SanitaryStateController::class, 'store']);
+Route::get('/api-sanitary-state/{id}', [SanitaryStateController::class, 'show']);
+Route::post('/api-sanitary-state/{id}', [SanitaryStateController::class, 'update']);
+Route::delete('/api-sanitary-state/{id}', [SanitaryStateController::class, 'destroy']);
 
-Route::get('/api-alimentations/{site_id}', [APIAlimentationController::class, 'index']);
-Route::post('/api-alimentation', [APIAlimentationController::class, 'store']);
-Route::get('/api-alimentation/{id}', [APIAlimentationController::class, 'show']);
-Route::post('/api-alimentation/{id}', [APIAlimentationController::class, 'update']);
-Route::delete('/api-alimentation/{id}', [APIAlimentationController::class, 'destroy']);
+Route::get('/api-alimentations/{site_id}', [AlimentationController::class, 'index']);
+Route::post('/api-alimentation', [AlimentationController::class, 'store']);
+Route::get('/api-alimentation/{id}', [AlimentationController::class, 'show']);
+Route::post('/api-alimentation/{id}', [AlimentationController::class, 'update']);
+Route::delete('/api-alimentation/{id}', [AlimentationController::class, 'destroy']);
 
-Route::get('/api-reproductions/{site_id}', [APIReproductionController::class, 'index']);
-Route::post('/api-reproduction', [APIReproductionController::class, 'store']);
-Route::get('/api-reproduction/{id}', [APIReproductionController::class, 'show']);
-Route::post('/api-reproduction/{id}', [APIReproductionController::class, 'update']);
-Route::delete('/api-reproduction/{id}', [APIReproductionController::class, 'destroy']);
+Route::get('/api-reproductions/{site_id}', [ReproductionController::class, 'index']);
+Route::post('/api-reproduction', [ReproductionController::class, 'store']);
+Route::get('/api-reproduction/{id}', [ReproductionController::class, 'show']);
+Route::post('/api-reproduction/{id}', [ReproductionController::class, 'update']);
+Route::delete('/api-reproduction/{id}', [ReproductionController::class, 'destroy']);
 
-Route::get('/api-relocations/{site_id}', [APIRelocationController::class, 'index']);
-Route::post('/api-relocation', [APIRelocationController::class, 'store']);
-Route::get('/api-relocation/{id}', [APIRelocationController::class, 'show']);
-Route::post('/api-relocation/{id}', [APIRelocationController::class, 'update']);
-Route::delete('/api-relocation/{id}', [APIRelocationController::class, 'destroy']);
+Route::get('/api-relocations/{site_id}', [RelocationController::class, 'index']);
+Route::post('/api-relocation', [RelocationController::class, 'store']);
+Route::get('/api-relocation/{id}', [RelocationController::class, 'show']);
+Route::post('/api-relocation/{id}', [RelocationController::class, 'update']);
+Route::delete('/api-relocation/{id}', [RelocationController::class, 'destroy']);
 
-Route::get('/api-observations/{site_id}', [APIObservationController::class, 'index']);
-Route::post('/api-observation', [APIObservationController::class, 'store']);
-Route::get('/api-observation/{id}', [APIObservationController::class, 'show']);
-Route::post('/api-observation/{id}', [APIObservationController::class, 'update']);
-Route::delete('/api-observation/{id}', [APIObservationController::class, 'destroy']);
+Route::get('/api-observations/{site_id}', [ObservationController::class, 'index']);
+Route::post('/api-observation', [ObservationController::class, 'store']);
+Route::get('/api-observation/{id}', [ObservationController::class, 'show']);
+Route::post('/api-observation/{id}', [ObservationController::class, 'update']);
+Route::delete('/api-observation/{id}', [ObservationController::class, 'destroy']);
 
 Route::get('/species-list', function () {
     try {

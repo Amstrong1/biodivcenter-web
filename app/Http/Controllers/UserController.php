@@ -61,10 +61,8 @@ class UserController extends Controller
 
         if (Auth::user()->role == 'adminONG') {
             $data['ong_id'] = Auth::user()->ong_id;
-            $data['site_id'] = $request->site;
             $data['role'] = 'agent';
             $data['organization'] = Auth::user()->ong->name;
-            unset($data['site']);
         }
 
         if (Auth::user()->role == 'admin') {
@@ -131,7 +129,7 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user)
     {
-        $user->fill($request->validated());
+        $data = $request->validated();
 
         if ($request->file('picture') != null) {
             try {
@@ -139,14 +137,14 @@ class UserController extends Controller
                     Storage::delete($user->picture);
                 }
                 $name = $user->slug . '_pic.' . $request->picture->extension();
-                $user->picture = $request->picture->storeAs('user', $name, 'public');
+                $data['picture'] = $request->picture->storeAs('user', $name, 'public');
             } catch (\Exception $e) {
                 return back();
             }
         }
 
         try {
-            $user->save();
+            $user->update($data);
             return redirect()->route('users.index');
         } catch (\Exception $e) {
             return back();
@@ -303,7 +301,7 @@ class UserController extends Controller
         if (Auth::user()->role == 'adminONG') {
             $fields = array_merge(
                 [
-                    'site' => [
+                    'site_id' => [
                         'title' => "Site",
                         'placeholder' => 'Sélectionnez un site',
                         'field' => 'model',

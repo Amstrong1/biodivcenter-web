@@ -157,10 +157,6 @@ class SpecieController extends Controller
             'inaturalist_link' => 'Lien Inaturalist',
             // 'english_name' => 'Nom Anglais',
         ];
-
-        if (Auth::user()->role == 'adminONG') {
-            $columns['site_name'] = 'Site';
-        }
         return $columns;
     }
 

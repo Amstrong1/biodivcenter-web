@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
     {
             $rules = [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'email' => ['required', 'string', 'email', 'max:255'],
                 'contact' => ['required', 'string', 'max:20'],
                 'ong' => ['required_if:role,adminONG', 'integer', 'exists:ongs,id'],
                 'picture' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
