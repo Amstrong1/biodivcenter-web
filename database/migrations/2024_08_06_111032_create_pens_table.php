@@ -12,16 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pens', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ong_id')->constrained()->onDelete('cascade');
-            $table->foreignId('site_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('ong_id')->constrained()->onDelete('cascade');
+            $table->ulid('site_id')->constrained()->onDelete('cascade');
             $table->string('number');
             $table->string('description');
             $table->string('area');
             $table->string('photo')->nullable();
             $table->string('state')->default('Disponible');
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
     }
 

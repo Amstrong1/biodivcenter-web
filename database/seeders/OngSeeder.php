@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Ong;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 
 class OngSeeder extends Seeder
@@ -14,8 +15,8 @@ class OngSeeder extends Seeder
     {
         Ong::factory()->create(
             [
+                'id' => (string) Str::ulid(),
                 'name' => 'MdT',
-                'slug' => 'mdt',
                 'country' => 'Benin',
                 'siege_social' => 'Natitingou',
                 'mdt_membership' => true,

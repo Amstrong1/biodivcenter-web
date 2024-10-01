@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\TypeHabitat;
+
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreTypeHabitatRequest;
 use App\Http\Requests\UpdateTypeHabitatRequest;
@@ -41,7 +42,7 @@ class TypeHabitatController extends Controller
         $typeHabitat = new TypeHabitat();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
+        $data['id'] = Str::ulid();
         try {
             $typeHabitat->create($data);
             return redirect()->route('type-habitats.index');

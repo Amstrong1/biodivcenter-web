@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ong_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('site_id')->nullable()->constrained()->onDelete('cascade');
+            $table->ulid('slug')->unique();
+            $table->ulid('ong_id');
+            $table->ulid('site_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('contact');
@@ -23,10 +24,12 @@ return new class extends Migration
             $table->string('organization')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('slug');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

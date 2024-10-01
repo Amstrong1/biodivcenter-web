@@ -6,13 +6,14 @@ use App\Models\Ong;
 use App\Models\Site;
 use App\Models\User;
 use Inertia\Inertia;
+
 use Illuminate\Support\Str;
 use App\Mail\UserPasswordMail;
 use App\Models\SupervisorRight;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
@@ -26,7 +27,7 @@ class UserController extends Controller
         $query = User::query();
 
         if (Auth::user()->role == 'adminONG') {
-            $query->where('ong_id', Auth::user()->ong_id);
+            $query->where('ong_id', Auth::user()->ong_id)->where('role', '!=', 'adminONG');
         } else if (Auth::user()->role == 'admin') {
             $query->where('role', '!=', 'admin');
         }
@@ -57,7 +58,8 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
+
+        $data['slug'] = Str::ulid();
 
         if (Auth::user()->role == 'adminONG') {
             $data['ong_id'] = Auth::user()->ong_id;
@@ -66,13 +68,12 @@ class UserController extends Controller
         }
 
         if (Auth::user()->role == 'admin') {
-            $data['ong_id'] = $request->ong ?? null;
+            $data['ong_id'] = $request->ong_id ?? null;
             $data['role'] = $request->role;
             $data['organization'] = match ($request->role) {
-                'adminONG' => Ong::find($request->ong)->name,
+                'adminONG' => Ong::find($request->ong_id)->name,
                 default => 'MdT',
             };
-            unset($data['ong']);
         }
 
         if ($request->picture != null) {
@@ -136,7 +137,7 @@ class UserController extends Controller
                 if ($user->picture) {
                     Storage::delete($user->picture);
                 }
-                $name = $user->slug . '_pic.' . $request->picture->extension();
+                $name = $user->id . '_pic.' . $request->picture->extension();
                 $data['picture'] = $request->picture->storeAs('user', $name, 'public');
             } catch (\Exception $e) {
                 return back();
@@ -241,13 +242,13 @@ class UserController extends Controller
                         'options' => array_intersect_key(config('global.roles'), array_flip(['guest', 'adminONG', 'partner', 'supervisor'])),
                         'colspan' => false
                     ],
-                    'ong' => [
+                    'ong_id' => [
                         'title' => "ONG",
                         'placeholder' => 'Sélectionnez une ONG',
                         'field' => 'model',
                         'required' => true,
                         'required_on_edit' => true,
-                        'options' => Ong::all('id', 'name'),
+                        'options' => Ong::select('id', 'name')->get(),
                         'colspan' => false
                     ],
                 ],
@@ -307,7 +308,7 @@ class UserController extends Controller
                         'field' => 'model',
                         'required' => true,
                         'required_on_edit' => true,
-                        'options' => Site::where('ong_id', Auth::user()->ong_id)->select('id', 'name')->get(),
+                        'options' => Site::select('id', 'name')->where('ong_id', Auth::user()->ong_id)->get(),
                         'colspan' => false
                     ],
                 ],

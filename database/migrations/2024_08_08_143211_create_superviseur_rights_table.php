@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('supervisor_rights', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('configurations');
             $table->boolean('manage_ongs');

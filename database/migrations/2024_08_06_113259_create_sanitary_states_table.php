@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sanitary_states', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ong_id')->constrained();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('animal_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('ong_id');
+            $table->ulid('site_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->ulid('animal_id');
             $table->string('label');
             $table->string('description');
             $table->string('corrective_action')->nullable();
@@ -24,8 +24,11 @@ return new class extends Migration
             $table->integer('temperature')->nullable();
             $table->integer('height')->nullable();
             $table->integer('weight')->nullable();
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('animal_id')->references('id')->on('animals')->onDelete('cascade');
         });
     }
 

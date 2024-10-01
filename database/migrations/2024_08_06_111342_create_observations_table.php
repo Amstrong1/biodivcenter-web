@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('observations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ong_id')->constrained()->onDelete('cascade');
-            $table->foreignId('site_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('ong_id');
+            $table->ulid('site_id');
             $table->string('subject');
             $table->text('observation');
             $table->string('photo')->nullable();
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
     }
 

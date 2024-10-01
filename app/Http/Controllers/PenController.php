@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pen;
-use Illuminate\Support\Str;
+
 use App\Http\Requests\StorePenRequest;
 use App\Http\Requests\UpdatePenRequest;
 use Inertia\Inertia;
@@ -41,7 +41,6 @@ class PenController extends Controller
         $pen = new Pen();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
 
         try {
             $pen->create($data);

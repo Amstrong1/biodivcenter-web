@@ -3,86 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
-use App\Models\Genus;
-use App\Models\Order;
-use App\Models\Reign;
-use App\Models\Branch;
-use App\Models\Family;
 use App\Models\Specie;
 use App\Models\TypeHabitat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Classification;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ExcelController extends Controller
 {
-    public function importOrder()
-    {
-        $order = new Order();
-
-        $import = importExcel(request(), $order);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
-    public function importReign()
-    {
-        $reign = new Reign();
-
-        $import = importExcel(request(), $reign);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
-    public function importGenus()
-    {
-        $genus = new Genus();
-
-        $import = importExcel(request(), $genus);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
-    public function importFamily()
-    {
-        $family = new Family();
-
-        $import = importExcel(request(), $family);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
-    public function importBranch()
-    {
-        $branch = new Branch();
-
-        $import = importExcel(request(), $branch);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
-    public function importClassification()
-    {
-        $classification = new Classification();
-
-        $import = importExcel(request(), $classification);
-
-        if ($import == true) {
-            return back();
-        }
-    }
-
     public function importSpecie(Request $request)
     {
         $specie = new Specie();
@@ -112,13 +40,13 @@ class ExcelController extends Controller
             // Vérifier que la ligne n'est pas vide avant d'insérer dans la base de données
             if (!empty($data[0]) && !empty($data[1]) && !empty($data[2]) && !empty($data[3])) {
                 $specie::create([
+                    'id' => Str::ulid(),
                     'scientific_name' => $data[0],
                     'french_name' => $data[1],
                     'status_uicn' => $data[2],
                     'status_cites' => $data[3],
                     'uicn_link' => $data[4] ?? "",
                     'inaturalist_link' => $data[5] ?? "",
-                    'slug' => Str::slug($data[0], '_'),
                 ]);
             }
         }
@@ -155,9 +83,9 @@ class ExcelController extends Controller
             // Vérifier que la ligne n'est pas vide avant d'insérer dans la base de données
             if (!empty($data[0]) && !empty($data[1])) {
                 $type_habitat::create([
+                    'id' => Str::ulid(),
                     'name' => $data[0],
                     'description' => $data[1],
-                    'slug' => Str::slug($data[0], '_'),
                 ]);
             }
         }
@@ -198,7 +126,6 @@ class ExcelController extends Controller
                     'country' => $data[1],
                     'siege_social' => $data[2],
                     'mdt_membership' => $data[3] == 'Oui' ? true : false,
-                    'slug' => Str::slug($data[0], '_'),
                 ]);
             }
         }

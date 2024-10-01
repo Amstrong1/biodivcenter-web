@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -12,13 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ongs', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->string('country');
             $table->string('siege_social');
             $table->string('logo')->nullable();
             $table->boolean('mdt_membership')->default(false);
-            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
         });

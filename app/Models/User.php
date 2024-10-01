@@ -62,7 +62,8 @@ class User extends Authenticatable
         return $this->hasOne(SupervisorRight::class);
     }
 
-    public function getRoleLabelAttribute(){
+    public function getRoleLabelAttribute()
+    {
         foreach (config('global.roles') as $key => $value) {
             if ($this->role == $key) {
                 return $value;
@@ -70,11 +71,18 @@ class User extends Authenticatable
         }
     }
 
-    public function getCountryAttribute(){
+    public function getCountryAttribute()
+    {
         return $this->ong->country;
     }
 
-    public function getOngNameAttribute(){
+    public function getOngNameAttribute()
+    {
         return $this->ong->name;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

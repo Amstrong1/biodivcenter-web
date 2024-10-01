@@ -21,18 +21,11 @@ class StoreSpecieRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'order' => ['required', 'exists:orders,id'],
-            'classification' => ['required', 'exists:classifications,id'],
-            'family' => ['required', 'exists:families,id'],
-            'genus' => ['required', 'exists:genera,id'],
-            'reign' => ['required', 'exists:reigns,id'],
-            'branch' => ['required', 'exists:branches,id'],
-            'status_uicn' => ['nullable', 'string', 'max:2'],
-            'status_cites' => ['nullable', 'string', 'max:3'],
+        return [            
+            'status_uicn' => ['nullable', 'string'],
+            'status_cites' => ['nullable', 'string'],
             'scientific_name' => ['required', 'string', 'max:255'],
             'french_name' => ['required', 'string', 'max:255'],
-            'english_name' => ['nullable', 'string', 'max:255'],
             'uicn_link' => ['nullable', 'string', 'max:255'],
             'inaturalist_link' => ['nullable', 'string', 'max:255'],
         ];

@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Animal extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $guarded = [];
 
@@ -46,12 +47,12 @@ class Animal extends Model
         return $this->belongsTo(Pen::class);
     }
 
-    public function sanitaryState(): HasMany
+    public function sanitaryStates(): HasMany
     {
         return $this->hasMany(SanitaryState::class);
     }
 
-    public function reproduction(): HasMany
+    public function reproductions(): HasMany
     {
         return $this->hasMany(Reproduction::class);
     }
@@ -95,12 +96,12 @@ class Animal extends Model
 
     public function getSanitaryStateLabelAttribute()
     {
-        return $this->sanitaryState->last()->label ?? 'Sain';
+        return $this->sanitaryStates->last()->label ?? 'Sain';
     }
 
     public function getSanitaryStateDetailAttribute()
     {
-        return $this->sanitaryState->last()->description ?? 'Non défini';
+        return $this->sanitaryStates->last()->description ?? 'Non défini';
     }
 
     public function getOngNameAttribute()

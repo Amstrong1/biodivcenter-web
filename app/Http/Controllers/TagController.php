@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
@@ -54,7 +53,6 @@ class TagController extends Controller
         $tag = new Tag();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['type'], '_');
         $data['ong_id'] = Auth::user()->ong_id;
         $tag->create($data);
     }

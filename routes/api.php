@@ -76,6 +76,18 @@ Route::get('/parents/{specie_id}', function () {
     }
 });
 
+Route::get('/animals-list/{site_id}', function () {
+    try {
+        return response()->json([
+           'animals' => Animal::where('site_id', request('site_id'))
+                ->get()
+                ->append('parent')
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json($e);
+    }
+});
+
 Route::get('/pens-list/{site_id}', function () {
     try {
         return response()->json(

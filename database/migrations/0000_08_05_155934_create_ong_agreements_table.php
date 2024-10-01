@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ong_agreements', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ong_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('ong_id');
             $table->string('agreement');
             $table->string('detail')->nullable();
             $table->string('num_agreement')->nullable();
             $table->string('obtainment_date');
             $table->string('expiration_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
         });
     }
 

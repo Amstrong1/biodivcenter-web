@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Ong;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,23 +18,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call([
-            BranchSeeder::class,
-            OrderSeeder::class,
-            FamilySeeder::class,
-            ReignSeeder::class,
-            GenusSeeder::class,
-            ClassificationSeeder::class,
             OngSeeder::class,
         ]);
 
+        $ong = Ong::first();
+
         User::factory()->create([
-            'ong_id' => '1',
+            'id' => 1,
+            'ong_id' => $ong->id,
+            'slug' => Str::ulid(),
             'name' => 'Mdt Admin',
             'email' => 'test@example.com',
             'contact' => '00000000',
             'role' => 'admin',
             'password' => Hash::make('password'),
-            'slug' => 'user',
         ]);
     }
 }

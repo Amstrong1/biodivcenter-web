@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('animals', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('specie_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ong_id')->constrained()->onDelete('cascade');
-            $table->foreignId('site_id')->constrained()->onDelete('cascade');
-            $table->foreignId('pen_id')->nullable()->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('specie_id');
+            $table->ulid('ong_id');
+            $table->ulid('site_id');
+            $table->ulid('pen_id');
             $table->string('name');
             $table->string('weight');
             $table->string('height');
@@ -26,9 +26,14 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('state')->default('present');
             $table->string('origin')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('animals');
-            $table->string('slug');
+            $table->ulid('parent_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('specie_id')->references('id')->on('species')->onDelete('cascade');
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('pen_id')->references('id')->on('pens')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('animals')->onDelete('cascade');
         });
     }
 

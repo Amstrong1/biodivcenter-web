@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sites', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ong_id')->constrained()->onDelete('cascade');
-            $table->foreignId('type_habitat_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('ong_id');
+            $table->ulid('type_habitat_id');
             $table->string('name');
             $table->string('address');
             $table->string('tracking')->nullable();
@@ -26,9 +26,11 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('latitude');
             $table->string('longitude');
-            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('type_habitat_id')->references('id')->on('type_habitats')->onDelete('cascade');
         });
     }
 

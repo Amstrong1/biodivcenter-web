@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use Inertia\Inertia;
 use App\Models\TypeHabitat;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSiteRequest;
@@ -55,16 +56,16 @@ class SiteController extends Controller
         $site = new Site();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
         $data['ong_id'] = Auth::user()->ong_id;
+        $data['id'] = Str::ulid();
 
         if ($request->hasFile('logo')) {
-            $logo = $data['slug'] . '_logo.' . $request->logo->extension();
+            $logo = $data['id'] . '_logo.' . $request->logo->extension();
             $data['logo'] = $request->logo->storeAs('site', $logo, 'public');
         }
 
         if ($request->hasFile('photo')) {
-            $photo = $data['slug'] . '_photo.' . $request->photo->extension();
+            $photo = $data['id'] . '_photo.' . $request->photo->extension();
             $data['photo'] = $request->photo->storeAs('site', $photo, 'public');
         }
         $site->create($data);
@@ -133,7 +134,7 @@ class SiteController extends Controller
                     if ($site->logo) {
                         Storage::delete($site->logo);
                     }
-                    $name = $site->slug . '_logo.' . $request->logo->extension();
+                    $name = $site->id . '_logo.' . $request->logo->extension();
                     $data['logo'] = $request->logo->storeAs('site', $name, 'public');
                 } catch (\Exception $e) {
                     return $e;
@@ -141,7 +142,6 @@ class SiteController extends Controller
             }
 
             $site->update($data);
-            // dd($site);
             return redirect()->route('sites.index');
         } catch (\Exception $e) {
             return $e;
@@ -297,7 +297,7 @@ class SiteController extends Controller
                         'field' => 'model',
                         'required' => true,
                         'required_on_edit' => true,
-                        'options' => TypeHabitat::all('name', 'id'),
+                        'options' => TypeHabitat::select('name', 'id')->get(),
                     ],
                 ],
                 $fields

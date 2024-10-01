@@ -3,59 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Specie extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $guarded = [];
 
     protected $append = [
         'animals_count',
-        'order_name',
-        'classification_name',
-        'family_name',
-        'genus_name',
-        'reign_name',
-        'branch_name',
         'site_name',
         'status_uicn_label',
     ];
-
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
-    public function classification(): BelongsTo
-    {
-        return $this->belongsTo(Classification::class);
-    }
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
-    }
-
-    public function family(): BelongsTo
-    {
-        return $this->belongsTo(Family::class);
-    }
-
-    public function genus(): BelongsTo
-    {
-        return $this->belongsTo(Genus::class);
-    }
-
-    public function reign(): BelongsTo
-    {
-        return $this->belongsTo(Reign::class);
-    }
-
+    
     public function animals(): HasMany
     {
         return $this->hasMany(Animal::class);
@@ -73,7 +37,7 @@ class Specie extends Model
 
     public function siteSpecies(): BelongsToMany
     {
-        return $this->belongsToMany(Specie::class)->withPivot('latitude', 'longitude');
+        return $this->belongsToMany(Specie::class);
     }
 
     public function getAnimalsCountAttribute()

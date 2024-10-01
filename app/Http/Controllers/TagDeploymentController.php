@@ -6,7 +6,7 @@ use App\Models\Tag;
 use App\Models\Site;
 use Inertia\Inertia;
 use App\Models\Animal;
-use Illuminate\Support\Str;
+
 use App\Models\TagDeployment;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTagDeploymentRequest;
@@ -44,7 +44,6 @@ class TagDeploymentController extends Controller
         $tagDeployment = new TagDeployment();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
         $tagDeployment->create($data);
     }
 

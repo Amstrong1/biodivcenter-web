@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use Inertia\Inertia;
 use App\Models\Observation;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreObservationRequest;
 use App\Http\Requests\UpdateObservationRequest;
@@ -59,7 +58,6 @@ class ObservationController extends Controller
             $data['photo'] = $request->photo->storeAs('observation', $photo, 'public');
         }
 
-        $data['slug'] = Str::slug($data['subject'], '_');
         $data['ong_id'] = Auth::user()->ong_id;
         $observation->create($data);
     }

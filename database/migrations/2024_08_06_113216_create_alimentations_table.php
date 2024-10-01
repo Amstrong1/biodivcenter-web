@@ -12,18 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('alimentations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('ong_id')->constrained();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('specie_id')->constrained();
+            $table->ulid('id')->primary();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->ulid('ong_id');
+            $table->ulid('site_id');
+            $table->ulid('specie_id');
             $table->string('age_range');
             $table->string('food');
             $table->string('frequency');
             $table->integer('quantity');
             $table->decimal('cost', 10, 2);
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('specie_id')->references('id')->on('species')->onDelete('cascade');
         });
     }
 

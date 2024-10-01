@@ -22,14 +22,8 @@ class UpdateSpecieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order' => ['required', 'exists:orders,id'],
-            'classification' => ['required', 'exists:classifications,id'],
-            'family' => ['required', 'exists:families,id'],
-            'genus' => ['required', 'exists:genera,id'],
-            'reign' => ['required', 'exists:reigns,id'],
-            'branch' => ['required', 'exists:branches,id'],
-            'status_uicn' => ['string', 'max:2'],
-            'status_cites' => ['string', 'max:3'],
+            'status_uicn' => ['string'],
+            'status_cites' => ['string'],
             'scientific_name' => ['required', 'string', 'max:255'],
             'french_name' => ['required', 'string', 'max:255'],
             'english_name' => ['string', 'max:255'],

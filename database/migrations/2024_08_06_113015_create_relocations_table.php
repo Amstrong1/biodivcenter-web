@@ -12,19 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('relocations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('animal_id')->constrained();
-            $table->foreignId('ong_origin_id')->constrained('ongs');
-            $table->foreignId('ong_destination_id')->constrained('ongs');
-            $table->foreignId('site_origin_id')->constrained('sites');
-            $table->foreignId('site_destination_id')->constrained('sites');
-            $table->foreignId('pen_origin_id')->constrained('pens')->nullable();
-            $table->foreignId('pen_destination_id')->constrained('pens')->nullable();
-            $table->string('comment')->nullable();
+            $table->ulid('id')->primary();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->ulid('animal_id');
+            $table->ulid('ong_origin_id');
+            $table->ulid('ong_destination_id');
+            $table->ulid('site_origin_id');
+            $table->ulid('site_destination_id');
+            $table->ulid('pen_origin_id');
+            $table->ulid('pen_destination_id');
+            $table->string('comment');
             $table->date('date_transfert');
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('animal_id')->references('id')->on('animals')->onDelete('cascade');
+            $table->foreign('ong_origin_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('ong_destination_id')->references('id')->on('ongs')->onDelete('cascade');
+            $table->foreign('site_origin_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('site_destination_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('pen_origin_id')->references('id')->on('pens')->onDelete('cascade');
+            $table->foreign('pen_destination_id')->references('id')->on('pens')->onDelete('cascade');
         });
     }
 

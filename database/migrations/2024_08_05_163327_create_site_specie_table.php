@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('site_specie', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('specie_id')->constrained();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->ulid('id')->primary();
+            $table->ulid('site_id');
+            $table->ulid('specie_id');
             $table->timestamps();
+
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('specie_id')->references('id')->on('species')->onDelete('cascade');
         });
     }
 

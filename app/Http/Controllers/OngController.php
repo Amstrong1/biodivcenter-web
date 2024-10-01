@@ -18,7 +18,7 @@ class OngController extends Controller
     public function index()
     {
         $search = request('search');
-        $query = Ong::where('id', '>', 1)->orderBy('id', 'desc');
+        $query = Ong::orderBy('id', 'desc');
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
         }
@@ -50,12 +50,13 @@ class OngController extends Controller
     public function store(StoreOngRequest $request)
     {
         $data = $request->validated();
+
+        $data['id'] = Str::ulid();
         $data['mdt_membership'] = $request->mdt_membership == 0 ? false : true;
-        $data['slug'] = Str::slug($request['name'], '_');
 
         if ($request->hasFile('logo')) {
             try {
-                $name = $data['slug'] . '_logo.' . $request->logo->extension();
+                $name = $data['id'] . '_logo.' . $request->logo->extension();
                 $data['logo'] = $request->logo->storeAs('ong', $name, 'public');
             } catch (\Exception $e) {
                 return back();
@@ -64,9 +65,9 @@ class OngController extends Controller
 
         try {
             Ong::create($data);
-            return to_route('ongs.index');
+            return redirect()->route('ongs.index');
         } catch (\Exception $e) {
-            return back();
+            return $e;
         }
     }
 
@@ -91,7 +92,7 @@ class OngController extends Controller
             if ($ong->logo != null) {
                 Storage::delete($ong->logo);
             }
-            $name = $ong->slug . '_logo.' . $request->logo->extension();
+            $name = $ong->id . '_logo.' . $request->logo->extension();
             $ong->logo = $request->logo->storeAs('ong', $name, 'public');
         }
 

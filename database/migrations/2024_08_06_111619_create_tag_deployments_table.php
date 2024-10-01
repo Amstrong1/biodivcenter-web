@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tag_deployments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('tag_id')->constrained()->onDelete('cascade');
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('animal_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->ulid('tag_id');
+            $table->ulid('site_id');
+            $table->ulid('animal_id');
             $table->date('deployment_date');
             $table->date('retirement_date')->nullable();
-            $table->string('slug');
             $table->timestamps();
+
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('animal_id')->references('id')->on('animals')->onDelete('cascade');
         });
     }
 

@@ -8,7 +8,7 @@ use App\Models\Site;
 use Inertia\Inertia;
 use App\Models\Animal;
 use App\Models\Relocation;
-use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRelocationRequest;
 use App\Http\Requests\UpdateRelocationRequest;
@@ -41,7 +41,6 @@ class RelocationController extends Controller
         $animal->save();
 
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name'], '_');
         $data['ong_origin_id'] = $animal->ong_id;
         $data['site_origin_id'] = $animal->site_id;
         $data['pen_origin_id'] = $animal->pen_id;

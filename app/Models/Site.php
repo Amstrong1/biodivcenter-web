@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Site extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUlids;
 
     protected $guarded = [];
 
@@ -38,7 +39,7 @@ class Site extends Model
 
     public function siteSpecies(): BelongsToMany
     {
-        return $this->belongsToMany(Specie::class)->withPivot('latitude', 'longitude');
+        return $this->belongsToMany(Specie::class);
     }
 
     public function ong(): BelongsTo

@@ -52,7 +52,7 @@
                                 </template>
                                 <template v-else-if="column === 'name' || column === 'title' || column === 'label'">
                                     <Link v-if="mactions && mactions.show"
-                                        :href="route(`${pluralize(type)}.show`, resource.id)"
+                                        :href="route(`${pluralize(type)}.show`, type == 'user' ? resource.slug : resource.id)"
                                         class="w-12 p-2 rounded-full text-xs bg-[#ddf3d1] text-primary text-center font-semibold whitespace-nowrap">
                                     {{ resource[column] }}
                                     </Link>
@@ -96,12 +96,13 @@
 
                             <td v-if="mactions && mactions.edit || mactions && mactions.delete" class="px-4 py-3">
                                 <div class="flex items-center justify-start space-x-4">
-                                    <Link v-if="mactions.edit" :href="route(`${pluralize(type)}.edit`, resource.id)"
+                                    <Link v-if="mactions.edit"
+                                        :href="route(`${pluralize(type)}.edit`, type == 'user' ? resource.slug : resource.id)"
                                         class="w-14 p-2 rounded-full text-xs bg-yellow-200 text-yellow-500 text-center font-semibold"
                                         aria-label="Edit">
                                     Editer
                                     </Link>
-                                    <button v-if="mactions.delete" @click="deleteResource(resource.id)"
+                                    <button v-if="mactions.delete" @click="deleteResource(type == 'user' ? resource.slug : resource.id)"
                                         class="w-12 p-2 text-xs bg-red-200 text-red-600 rounded-full text-center font-semibold"
                                         aria-label="Delete">
                                         Sup
