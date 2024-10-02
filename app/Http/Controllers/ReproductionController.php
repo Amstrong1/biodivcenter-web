@@ -31,6 +31,7 @@ class ReproductionController extends Controller
             'reproductions' => $reproductions,
             'csrf' => csrf_token(),
             'my_attributes' => $this->reproductionColumns(),
+            'filters' => request('search'),
         ]);
     }
 

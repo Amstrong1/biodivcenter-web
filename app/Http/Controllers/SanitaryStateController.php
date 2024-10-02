@@ -30,6 +30,7 @@ class SanitaryStateController extends Controller
             'sanitaryStates' => $sanitaryStates,
             'csrf' => csrf_token(),
             'my_attributes' => $this->sanitaryStateColumns(),
+            'filters' => request('search'),
         ]);
     }
 
@@ -43,7 +44,6 @@ class SanitaryStateController extends Controller
             'corrective_action' => 'Action Correctif',
             'cost' => 'Coût',
             'temperature' => 'Température',
-            'height' => 'Taille',
             'weight' => 'Poids',
         ];
         return $columns;

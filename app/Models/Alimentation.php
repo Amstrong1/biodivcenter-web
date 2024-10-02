@@ -13,7 +13,7 @@ class Alimentation extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['specie_name'];
+    protected $appends = ['specie_name', 'user_name'];
 
     public function site() : BelongsTo
     {
@@ -33,5 +33,10 @@ class Alimentation extends Model
     public function getSpecieNameAttribute()
     {
         return $this->specie->french_name;
+    }
+
+    public function getUserNameAttribute()
+    {
+        return $this->user->name;
     }
 }

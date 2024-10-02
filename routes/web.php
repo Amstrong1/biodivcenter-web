@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RelocationController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\TypeHabitatController;
+use App\Http\Controllers\AlimentationController;
 use App\Http\Controllers\ReproductionController;
 use App\Http\Controllers\SanitaryStateController;
 
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('observations', ObservationController::class);
     Route::resource('type-habitats', TypeHabitatController::class);
 
+    Route::get('alimentations', [AlimentationController::class, 'index'])->name('alimentations.index');
     Route::get('reproductions', [ReproductionController::class, 'index'])->name('reproductions.index');
     Route::get('sanitary-states', [SanitaryStateController::class, 'index'])->name('sanitary-states.index');
 

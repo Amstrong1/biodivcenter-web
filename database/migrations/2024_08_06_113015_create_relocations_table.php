@@ -19,8 +19,6 @@ return new class extends Migration
             $table->ulid('ong_destination_id');
             $table->ulid('site_origin_id');
             $table->ulid('site_destination_id');
-            $table->ulid('pen_origin_id');
-            $table->ulid('pen_destination_id');
             $table->string('comment');
             $table->date('date_transfert');
             $table->timestamps();
@@ -30,8 +28,6 @@ return new class extends Migration
             $table->foreign('ong_destination_id')->references('id')->on('ongs')->onDelete('cascade');
             $table->foreign('site_origin_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('site_destination_id')->references('id')->on('sites')->onDelete('cascade');
-            $table->foreign('pen_origin_id')->references('id')->on('pens')->onDelete('cascade');
-            $table->foreign('pen_destination_id')->references('id')->on('pens')->onDelete('cascade');
         });
     }
 

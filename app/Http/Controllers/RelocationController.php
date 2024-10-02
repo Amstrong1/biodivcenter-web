@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
-use App\Models\Pen;
 use App\Models\Site;
 use Inertia\Inertia;
 use App\Models\Animal;
@@ -43,13 +42,11 @@ class RelocationController extends Controller
         $data = $request->validated();
         $data['ong_origin_id'] = $animal->ong_id;
         $data['site_origin_id'] = $animal->site_id;
-        $data['pen_origin_id'] = $animal->pen_id;
         $relocation->create($data);
 
         $newAnimal = $animal->replicate();
         $newAnimal->ong_id = $data->ong_destination;
         $newAnimal->site_id = $data->site_destination;
-        $newAnimal->pen_id = $data->pen_destination;
         $newAnimal->origin = $animal->ong_id;
         $newAnimal->state = 'present';
         $newAnimal->save();
@@ -151,14 +148,6 @@ class RelocationController extends Controller
                 'required' => true,
                 'required_on_edit' => true,
                 'options' => Site::all('id', 'name'),
-            ],
-            'pen_destination' => [
-                'title' => "Enclos Destination (Optionnel)",
-                'placeholder' => 'Sélectionner Site',
-                'field' => 'model',
-                'required' => true,
-                'required_on_edit' => true,
-                'options' => Pen::where('state', 'Disponible')->get('id', 'numero'),
             ],
             'date_transfert' => [
                 'title' => "Date de transfert",

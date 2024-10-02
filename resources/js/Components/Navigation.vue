@@ -21,6 +21,11 @@
         Transferts
         </Link>
 
+        <Link :href="route('alimentations.index')"
+            :class="route().current('alimentations.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
+        Alimentation
+        </Link>
+
         <Link :href="route('reproductions.index')" v-if="$page.props.auth.user.role == 'adminONG'"
             :class="route().current('reproductions.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Historique Reproductions

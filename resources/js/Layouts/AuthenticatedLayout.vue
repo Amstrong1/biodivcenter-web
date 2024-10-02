@@ -68,6 +68,7 @@ const getPageTitle = () => {
 
         { pattern: /^\/reproductions\/?$/, title: 'Liste des reproductions' },
         { pattern: /^\/sanitary-states\/?$/, title: 'Liste des Etats sanitaires' },
+        { pattern: /^\/alimentations\/?$/, title: 'Alimentations des espèces' },
     ];
 
     for (const route of routes) {
