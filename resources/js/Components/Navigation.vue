@@ -21,6 +21,16 @@
         Transferts
         </Link>
 
+        <Link :href="route('reproductions.index')" v-if="$page.props.auth.user.role == 'adminONG'"
+            :class="route().current('reproductions.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
+        Historique Reproductions
+        </Link>
+
+        <Link :href="route('sanitary-states.index')" v-if="$page.props.auth.user.role == 'adminONG'"
+            :class="route().current('sanitary-states.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
+        Historique Etat Sanitaire
+        </Link>
+
         <Link :href="route('tags.index')" v-if="$page.props.auth.user.role == 'adminONG'"
             :class="route().current('tags.index') ? 'px-8 py-2 bg-primary text-white rounded-xl' : ''">
         Outil de suivi

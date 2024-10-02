@@ -10,38 +10,21 @@ class ReproductionController extends Controller
 {
     public function index($site_id)
     {
-        $reproductions = Reproduction::where('site_id', $site_id)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->append('animal_name');
+        $reproductions = Reproduction::where('site_id', $site_id)->get();
         return response()->json($reproductions, 200);
-    }
-
-    public function show($id)
-    {
-        $reproduction = Reproduction::where('animal_id', $id)
-        ->orderBy('id', 'desc')
-        ->first()
-        ->append('animal_name');
-        return response()->json($reproduction);
     }
 
     public function store(Request $request)
     {
         try {
-            Reproduction::create($request->all());
-            return response()->json(201);
-        } catch (\Exception $e) {
-            return response()->json($e);
-        }
-    }
+            if (Reproduction::find($request['id']) !== null) {
+                $reproduction = Reproduction::find($request->id);
+                $reproduction->update($request->all());
+            } else {
+                Reproduction::create($request->all());
+            }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $reproduction = Reproduction::find($id);
-            $reproduction->update($request->all());
-            return response()->json([$reproduction], 200);
+            return response()->json(201);
         } catch (\Exception $e) {
             return response()->json($e);
         }

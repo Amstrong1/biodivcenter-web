@@ -21,13 +21,13 @@
                 </div>
             </div>
 
-            <div class="sticky top-0 h-screen bg-[#f1f4ef] p-8 rounded-lg shadow-md">
+            <!-- <div class="sticky top-0 h-screen bg-[#f1f4ef] p-8 rounded-lg shadow-md">
                 <span class="font-semibold tracking-wide">Carte du site</span>
                 <hr class="mt-2 mb-6 h-1 bg-black rounded-lg">
                 <div class="h-[90%]">
                     <Map :initialMarkers="$page.props.initialMarkers" />
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="mt-4 flex gap-2 text-sm">

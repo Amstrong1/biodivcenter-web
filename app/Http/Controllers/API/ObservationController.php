@@ -10,35 +10,26 @@ class ObservationController extends Controller
 {
     public function index($site_id)
     {
-        $observations = Observation::where('site_id', $site_id)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->append('formated_date');
+        $observations = Observation::where('site_id', $site_id)->get();
         return response()->json($observations, 200);
-    }
-
-    public function show($id)
-    {
-        $observation = Observation::find($id);
-        return response()->json($observation);
     }
 
     public function store(Request $request)
     {
         try {
-            Observation::create($request->all());
-            return response()->json(201);
-        } catch (\Exception $e) {
-            return response()->json($e);
-        }
-    }
+            $data = $request->all();
+            if ($request->hasFile('photo')) {
+                $name = $request['id'] . '_observation.' . $request->photo->extension();
+                $data['photo'] = $request->photo->storeAs('observation', $name, 'public');
+            }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $observation = Observation::find($id);
-            $observation->update($request->all());
-            return response()->json([$observation], 200);
+            if (Observation::find($data['id']) !== null) {
+                $observation = Observation::find($data['id']);
+                $observation->update($data);
+            } else {
+                Observation::create($data);
+            }
+            return response()->json(201);
         } catch (\Exception $e) {
             return response()->json($e);
         }

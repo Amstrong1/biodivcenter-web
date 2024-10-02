@@ -12,7 +12,7 @@ class SanitaryState extends Model
 
     protected $guarded = [];
 
-    protected $append = ['animal_name', 'formated_date'];
+    protected $append = ['animal_name', 'formated_date', 'user_name'];
 
     public function animal()
     {
@@ -30,5 +30,9 @@ class SanitaryState extends Model
 
     public function getFormatedDateAttribute() {
         return $this->created_at->format('Y-m-d');
+    }
+
+    public function getUserNameAttribute() {
+        return $this->user->name;
     }
 }

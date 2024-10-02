@@ -16,7 +16,7 @@ return new class extends Migration
             $table->ulid('specie_id');
             $table->ulid('ong_id');
             $table->ulid('site_id');
-            $table->ulid('pen_id');
+            $table->ulid('pen_id')->nullable();
             $table->string('name');
             $table->string('weight');
             $table->string('height');

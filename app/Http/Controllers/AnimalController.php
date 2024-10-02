@@ -45,12 +45,6 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        // $animal = $animal->append('site_name')->append('specie_name')->append('pen_number')->append('age')->append('parent');
-        // return Inertia::render('App/Animal/Show', [
-        //     'animal' => $animal,
-        //     'my_fields' => $this->animalFields(),
-        // ]);
-
         // Structurer les informations en une collection de tableaux avec title et infoList
         $infoCards = [
             [
@@ -60,6 +54,8 @@ class AnimalController extends Controller
                     'Age' => $animal->age,
                     'Poids' => $animal->weight,
                     'Taille' => $animal->height,
+                    'Description' => $animal->description,
+                    'Statut' => $animal->state,
                 ]
             ],
             [
@@ -73,10 +69,15 @@ class AnimalController extends Controller
                 ]
             ],
             [
-                'title' => 'Informations sur l\'état',
+                'title' => 'Informations sur l\'état sanitaire',
                 'infoList' => [
-                    'État' => $animal->state,
-                    'Description' => $animal->description,
+                    'Etat Sanitaire' => $animal->sanitaryStates->last()->label ?? 'Sain',
+                    'Description' => $animal->sanitaryStates->last()->description ?? 'Non renseigné',
+                    'Action corrective' => $animal->sanitaryStates->last()->corrective_action ?? 'Non renseigné',
+                    'Cout' => $animal->sanitaryStates->last()->cost ?? 'Non renseigné',
+                    'Temperature' => $animal->sanitaryStates->last()->temperature ?? 'Normal',
+                    'Taille' => $animal->sanitaryStates->last()->height ?? 'Normal',
+                    'Poids' => $animal->sanitaryStates->last()->weight ?? 'Normal',
                 ]
             ],
         ];

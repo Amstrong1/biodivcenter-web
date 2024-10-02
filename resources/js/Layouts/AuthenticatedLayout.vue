@@ -65,6 +65,9 @@ const getPageTitle = () => {
 
         { pattern: /^\/tags\/?$/, title: 'Liste des tags' },
         { pattern: /tags.*edit/, title: 'Modifier les informations du tag' },
+
+        { pattern: /^\/reproductions\/?$/, title: 'Liste des reproductions' },
+        { pattern: /^\/sanitary-states\/?$/, title: 'Liste des Etats sanitaires' },
     ];
 
     for (const route of routes) {

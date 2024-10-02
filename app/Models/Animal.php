@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,8 +22,6 @@ class Animal extends Model
         'pen_number',
         'parent',
         'formated_created_at',
-        'sanitary_state_label',
-        'sanitary_state_detail',
     ];
 
     public function specie(): BelongsTo
@@ -92,16 +89,6 @@ class Animal extends Model
     public function getFormatedCreatedAtAttribute()
     {
         return $this->created_at->format('Y-m-d');
-    }
-
-    public function getSanitaryStateLabelAttribute()
-    {
-        return $this->sanitaryStates->last()->label ?? 'Sain';
-    }
-
-    public function getSanitaryStateDetailAttribute()
-    {
-        return $this->sanitaryStates->last()->description ?? 'Non défini';
     }
 
     public function getOngNameAttribute()

@@ -10,35 +10,22 @@ class AlimentationController extends Controller
 {
     public function index($site_id)
     {
-        $alimentations = Alimentation::where('site_id', $site_id)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->append('specie_name');
+        $alimentations = Alimentation::where('site_id', $site_id)->get();
         return response()->json($alimentations, 200);
-    }
-
-    public function show($id)
-    {
-        $alimentation = Alimentation::find($id);
-        return response()->json($alimentation);
     }
 
     public function store(Request $request)
     {
         try {
+            if (Alimentation::find($request['id']) !== null) {
+                $alimentation = Alimentation::find($request['id']);
+                $alimentation->update($request->all());
+            } else {
+                Alimentation::create($request->all());
+            }
+
             Alimentation::create($request->all());
             return response()->json(201);
-        } catch (\Exception $e) {
-            return response()->json($e);
-        }
-    }
-
-    public function update(Request $request, $id)
-    {
-        try {
-            $alimentation = Alimentation::find($id);
-            $alimentation->update($request->all());
-            return response()->json(200);
         } catch (\Exception $e) {
             return response()->json($e);
         }

@@ -14,6 +14,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RelocationController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\TypeHabitatController;
+use App\Http\Controllers\ReproductionController;
+use App\Http\Controllers\SanitaryStateController;
 
 Route::get('/', [LandingController::class, 'index'])->name('guest.index');
 Route::get('/guest/sites', [LandingController::class, 'indexSite'])->name('guest.sites');
@@ -32,6 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('relocations', RelocationController::class);
     Route::resource('observations', ObservationController::class);
     Route::resource('type-habitats', TypeHabitatController::class);
+
+    Route::get('reproductions', [ReproductionController::class, 'index'])->name('reproductions.index');
+    Route::get('sanitary-states', [SanitaryStateController::class, 'index'])->name('sanitary-states.index');
 
     Route::post('import-species', [ExcelController::class, 'importSpecie'])->name('species.import');
     Route::post('import-type-habitats', [ExcelController::class, 'importHabitatType'])->name('type-habitats.import');

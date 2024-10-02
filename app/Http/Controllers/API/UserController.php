@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function update()
     {
-        $user = User::find(request('id'));
+        $user = User::where('id', request('id'))->first();
         $data = request()->all();
         if (request()->hasFile('picture')) {
             $name = $user['slug'] . '_user.' . request()->picture->extension();
