@@ -16,7 +16,6 @@ return new class extends Migration
             $table->ulid('specie_id');
             $table->ulid('ong_id');
             $table->ulid('site_id');
-            $table->ulid('pen_id')->nullable();
             $table->string('name');
             $table->string('weight');
             $table->string('height');
@@ -32,7 +31,6 @@ return new class extends Migration
             $table->foreign('specie_id')->references('id')->on('species')->onDelete('cascade');
             $table->foreign('ong_id')->references('id')->on('ongs')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
-            $table->foreign('pen_id')->references('id')->on('pens')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('animals')->onDelete('cascade');
         });
     }
