@@ -11,6 +11,7 @@
             <IconLink href="/animals" label="Animaux" icon="paw-print.png" srIcon="paw-print_sr.png" />
             <IconLink href="/users" label="Utilisateurs" icon="friends.png" srIcon="friends_sr.png" />
             <IconLink href="/observations" label="Observations" icon="telescope.png" srIcon="telescope_sr.png" />
+            <IconLink v-if="$page.props.auth.user.role == 'admin' || $page.props.auth.user.role == 'supervisor'" href="/feedbacks" label="Feedback" icon="telescope.png" srIcon="telescope_sr.png" />
         </nav>
     </div>
 </template>

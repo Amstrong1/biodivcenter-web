@@ -22,9 +22,4 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Navigation from '@/Components/Navigation.vue';
 import { Head } from '@inertiajs/vue3';
 
-const showModal = ref(false);
-
-const closeModal = () => {
-    showModal.value = false
-}
 </script>

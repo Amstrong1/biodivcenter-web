@@ -11,6 +11,7 @@ use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\SpecieController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\RelocationController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\TypeHabitatController;
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('observations', ObservationController::class);
     Route::resource('type-habitats', TypeHabitatController::class);
 
+    Route::get('feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
     Route::get('alimentations', [AlimentationController::class, 'index'])->name('alimentations.index');
     Route::get('reproductions', [ReproductionController::class, 'index'])->name('reproductions.index');
     Route::get('sanitary-states', [SanitaryStateController::class, 'index'])->name('sanitary-states.index');

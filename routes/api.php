@@ -5,6 +5,7 @@ use App\Models\Specie;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\IndividuController;
 use App\Http\Controllers\API\ObservationController;
 use App\Http\Controllers\API\AlimentationController;
@@ -16,6 +17,8 @@ Route::get('/user/{id}', [UserController::class, 'show']);
 Route::post('/user/{id}', [UserController::class, 'update']);
 
 Route::post('/signin', [AuthController::class, 'signin']);
+
+Route::post('/feedback', [FeedbackController::class, 'store']);
 
 Route::get('/individus/{site_id}', [IndividuController::class, 'index']);
 Route::post('/individu', [IndividuController::class, 'store']);
