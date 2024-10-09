@@ -59,6 +59,7 @@ class ObservationController extends Controller
         }
 
         $data['ong_id'] = Auth::user()->ong_id;
+        $data['user_id'] = Auth::id();
         $observation->create($data);
     }
 
@@ -126,6 +127,7 @@ class ObservationController extends Controller
     private function observationColumns()
     {
         $columns = [
+            'photo' => 'Image',
             'site_name' => 'Site',
             'subject' => 'Objet',
             'observation' => 'Observation',

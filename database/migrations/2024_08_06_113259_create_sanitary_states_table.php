@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->ulid('ong_id');
             $table->ulid('site_id');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained();
             $table->ulid('animal_id');
             $table->string('label');
             $table->string('description');

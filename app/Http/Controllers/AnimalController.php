@@ -63,7 +63,6 @@ class AnimalController extends Controller
                 'infoList' => [
                     'ONG' => $animal->ong_name,
                     'Site' => $animal->site_name,
-                    'Enclos' => $animal->pen->number ?? 'Non renseigné',
                     'Provenance' => $animal->origin ?? 'Non renseigné',
                     'Parent' => $animal->parent ?? 'Non renseigné',
                 ]

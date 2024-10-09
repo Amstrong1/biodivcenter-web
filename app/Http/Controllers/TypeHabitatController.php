@@ -39,12 +39,10 @@ class TypeHabitatController extends Controller
      */
     public function store(StoreTypeHabitatRequest $request)
     {
-        $typeHabitat = new TypeHabitat();
-
         $data = $request->validated();
-        $data['id'] = Str::ulid();
+
         try {
-            $typeHabitat->create($data);
+            TypeHabitat::create($data);
             return redirect()->route('type-habitats.index');
         } catch (\Exception $e) {
             return back();

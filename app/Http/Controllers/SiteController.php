@@ -57,7 +57,6 @@ class SiteController extends Controller
 
         $data = $request->validated();
         $data['ong_id'] = Auth::user()->ong_id;
-        $data['id'] = Str::ulid();
 
         if ($request->hasFile('logo')) {
             $logo = $data['id'] . '_logo.' . $request->logo->extension();
@@ -82,7 +81,7 @@ class SiteController extends Controller
                 'infoList' => [
                     'Nom' => $site->name,
                     'Adresse' => $site->address,
-                    'Superficie' => $site->area,
+                    'Superficie (Ha)' => $site->area,
                     'Type de conservation' => $site->type,
                     'Objectif principal' => $site->main_goal,
                     'Objectif secondaire' => $site->second_goal ?? 'Non renseigné',
@@ -219,9 +218,10 @@ class SiteController extends Controller
                 'required_on_edit' => false,
             ],
             'area' => [
-                'title' => "Superficie",
+                'title' => "Superficie (Ha)",
                 'placeholder' => 'Entrez la superficie du site',
-                'field' => 'text',
+                'field' => 'number',
+                'step' => 0.01,
                 'required' => true,
                 'required_on_edit' => true,
             ],

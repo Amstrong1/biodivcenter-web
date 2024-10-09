@@ -66,7 +66,30 @@ watch(filter, (newFilter) => {
                                 <td class="px-6 py-4">{{ specie.scientific_name }}</td>
                                 <td class="px-6 py-4">{{ specie.animals_count }}</td>
                                 <td class="px-6 py-4">{{ specie.status_cites }}</td>
-                                <td class="px-6 py-4">{{ specie.status_uicn }}</td>
+                                <td class="px-6 py-4">
+                                    <span :class="[
+                                        'whitespace-nowrap px-2 py-1 font-semibold leading-tight rounded-full',
+                                        specie.status_uicn === 'NE' ?
+                                            'text-black bg-white' :
+                                            specie.status_uicn === 'DD' ?
+                                                'text-black bg-gray-700' :
+                                                specie.status_uicn === 'LC' ?
+                                                    'text-black bg-primary' :
+                                                    specie.status_uicn === 'NT' ?
+                                                        'text-black bg-pink-300' :
+                                                        specie.status_uicn === 'VU' ?
+                                                            'text-black bg-yellow-800' :
+                                                            specie.status_uicn === 'EN' ?
+                                                                'text-black bg-orange-800' :
+                                                                specie.status_uicn === 'CR' ?
+                                                                    'text-black bg-red-800' :
+                                                                    specie.status_uicn === 'EW' ?
+                                                                        'text-white bg-purple-800' :
+                                                                        'text-white bg-black'
+                                    ]">
+                                        {{ specie.status_uicn }}
+                                    </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

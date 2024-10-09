@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->ulid('ong_id');
             $table->ulid('type_habitat_id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('address');
             $table->string('tracking')->nullable();
             $table->string('area');

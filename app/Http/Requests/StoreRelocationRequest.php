@@ -22,7 +22,11 @@ class StoreRelocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'animal_id' => 'required|exists:animals,id',
+            'ong_destination_id' => 'required|exists:ongs,id',
+            'site_destination_id' => 'required|exists:sites,id',
+            'date_transfert' => 'required|date',
+            'comment' => 'nullable|string|max:255',
         ];
     }
 }

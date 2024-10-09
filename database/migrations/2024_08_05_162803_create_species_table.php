@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('species', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('scientific_name');
-            $table->string('french_name');
+            $table->string('scientific_name')->unique();
+            $table->string('french_name')->unique();
             $table->string('status_uicn')->nullable();
             $table->string('status_cites')->nullable();
             $table->string('uicn_link')->nullable();
-            $table->string('inaturalist_link')->nullable();
+            $table->string('inaturalist_link')->nullable();            
+            $table->string('classification');
+            $table->string('diet');
             $table->timestamps();
         });
     }

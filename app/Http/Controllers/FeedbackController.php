@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Feedback;
-use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -18,6 +17,10 @@ class FeedbackController extends Controller
         }
 
         $feedbacks = $query->paginate(15)->withQueryString();
+
+        $feedbacks->getCollection()->transform(function ($feedback) {
+            return $feedback->append('user_name')->append('formated_date');
+        });
 
         return Inertia::render('App/Feedback/Index', [
             'feedbacks' => $feedbacks,

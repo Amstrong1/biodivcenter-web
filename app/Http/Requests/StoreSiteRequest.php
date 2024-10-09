@@ -26,7 +26,7 @@ class StoreSiteRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'tracking' => ['nullable', 'string', 'max:255'],
-            'area' => ['required', 'string', 'max:255'],
+            'area' => ['required', 'numeric'],
             'type' => ['required'],
             'main_goal' => ['required', 'string', 'max:255'],
             'second_goal' => ['nullable', 'string', 'max:255'],

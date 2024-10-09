@@ -37,7 +37,7 @@ class Specie extends Model
 
     public function siteSpecies(): BelongsToMany
     {
-        return $this->belongsToMany(Specie::class);
+        return $this->belongsToMany(Site::class);
     }
 
     public function getAnimalsCountAttribute()

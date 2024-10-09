@@ -16,7 +16,7 @@ class Site extends Model
 
     protected $guarded = [];
 
-    protected $append = ['biodiv_value', 'type_habitat_name', 'ong_country'];
+    protected $append = ['biodiv_value', 'type_habitat_name', 'ong_country', 'ong_name'];
 
     public function type_habitat(): BelongsTo
     {
@@ -31,11 +31,7 @@ class Site extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
-    }
-    public function pens(): HasMany
-    {
-        return $this->hasMany(Pen::class);
-    }
+    }    
 
     public function siteSpecies(): BelongsToMany
     {
@@ -71,5 +67,10 @@ class Site extends Model
     public function getOngCountryAttribute()
     {
         return $this->ong->country;
+    }
+
+    public function getOngNameAttribute()
+    {
+        return $this->ong->name;
     }
 }

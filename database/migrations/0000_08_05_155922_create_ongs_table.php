@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ongs', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('country');
             $table->string('siege_social');
             $table->string('logo')->nullable();

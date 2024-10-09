@@ -51,7 +51,6 @@ class OngController extends Controller
     {
         $data = $request->validated();
 
-        $data['id'] = Str::ulid();
         $data['mdt_membership'] = $request->mdt_membership == 0 ? false : true;
 
         if ($request->hasFile('logo')) {

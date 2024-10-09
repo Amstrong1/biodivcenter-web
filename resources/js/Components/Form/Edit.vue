@@ -12,6 +12,7 @@
                     <!-- Label and Input Fields based on the type -->
                     <label v-if="value.field !== 'checkbox'" :for="attr" class="mb-1 block font-semibold text-xs">
                         {{ value.title }}
+                        <span class="text-red-500" v-if="value.required_on_edit">*</span>
                     </label>
 
                     <!-- model -->

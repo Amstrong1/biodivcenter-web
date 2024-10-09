@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('alimentations', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->ulid('ong_id');
             $table->ulid('site_id');
             $table->ulid('specie_id');
+            $table->foreignId('user_id')->constrained();
             $table->string('age_range');
             $table->string('food');
             $table->string('frequency');

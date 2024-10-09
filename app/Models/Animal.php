@@ -39,11 +39,6 @@ class Animal extends Model
         return $this->belongsTo(Site::class);
     }
 
-    public function pen(): BelongsTo
-    {
-        return $this->belongsTo(Pen::class);
-    }
-
     public function sanitaryStates(): HasMany
     {
         return $this->hasMany(SanitaryState::class);
@@ -73,11 +68,6 @@ class Animal extends Model
     public function getSpecieNameAttribute()
     {
         return $this->specie->french_name;
-    }
-
-    public function getPenNumberAttribute()
-    {
-        return $this->pen !== null ? $this->pen->number : 'Non défini';
     }
 
     public function getParentAttribute()

@@ -106,7 +106,12 @@ const getPageTitle = () => {
                                         <div class="flex rounded-md">
                                             <button type="button"
                                                 class="flex gap-2 items-center justify-start px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                                <img class="h-12 rouded-full" src="/assets/icon/user.png" alt="user">
+                                                <img v-if="$page.props.auth.user.picture !== null"
+                                                    class="object-cover w-14 h-14 border-2 border-black rounded-full"
+                                                    :src="'/storage/' + $page.props.auth.user.picture" alt="profile"
+                                                    loading="lazy" />
+                                                    
+                                                <img v-else class="h-12 rouded-full" src="/assets/icon/user.png" alt="user">
                                                 <div class="flex flex-col items-start">
                                                     <span>{{ $page.props.auth.user.name }}</span>
                                                     <span>{{ $page.props.auth.user.role }}</span>

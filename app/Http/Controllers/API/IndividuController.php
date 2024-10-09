@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Animal;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class IndividuController extends Controller
@@ -36,6 +37,7 @@ class IndividuController extends Controller
             if (!DB::table('site_specie')->where('site_id', $animal->site_id)->where('specie_id', $animal->specie_id)->exists()) {
                 DB::table('site_specie')->insert(
                     [
+                        'id' => Str::ulid(),
                         'site_id' => $animal->site_id,
                         'specie_id' => $animal->specie_id,
                     ]

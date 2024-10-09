@@ -24,10 +24,12 @@ class StoreSpecieRequest extends FormRequest
         return [            
             'status_uicn' => ['nullable', 'string'],
             'status_cites' => ['nullable', 'string'],
-            'scientific_name' => ['required', 'string', 'max:255'],
-            'french_name' => ['required', 'string', 'max:255'],
+            'scientific_name' => ['required', 'string', 'max:255', 'unique:species'],
+            'french_name' => ['required', 'string', 'max:255', 'unique:species'],
             'uicn_link' => ['nullable', 'string', 'max:255'],
             'inaturalist_link' => ['nullable', 'string', 'max:255'],
+            'classification' => ['required'],
+            'diet' => ['required'],
         ];
     }
 }

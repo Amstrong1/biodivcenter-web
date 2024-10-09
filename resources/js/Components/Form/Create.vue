@@ -14,6 +14,7 @@
                     <!-- Label and Input Fields based on the type -->
                     <label v-if="value.field !== 'checkbox'" :for="attr" class="mb-1 block font-semibold text-xs">
                         {{ value.title }}
+                        <span class="text-red-500" v-if="value.required">*</span>
                     </label>
 
                     <!-- model -->
@@ -25,6 +26,20 @@
                             <option v-for="item in value.options" :key="item.id" :value="item.id">
                                 {{ item.name || item.title }}
                             </option>
+                        </select>
+                    </div>
+
+                    <!-- model optgroup -->
+                    <div class="mb-4" v-else-if="value.field === 'model-optgroup'">
+                        <select :id="attr" :name="attr"
+                            class="outline-none focus:ring-0 focus:border-0 focus:ring-offset-0 block w-full rounded-lg border-0 text-xs"
+                            v-model="form[attr]">
+                            <option value="" disabled>Cliquer pour sélectionner</option>
+                            <optgroup v-for="(group, index) in value.options" :key="index" :label="group.label">
+                                <option v-for="item in group.options" :key="item.id" :value="item.id">
+                                    {{ item.name || item.title }}
+                                </option>
+                            </optgroup>
                         </select>
                     </div>
 

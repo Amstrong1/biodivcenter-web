@@ -149,6 +149,8 @@ class SpecieController extends Controller
     {
         $uicn = config('global.uicn_labels');
         $cites = config('global.cites_labels');
+        $diet = config('global.diet');
+        $classifications = config('global.classifications');
 
         $fields = [
             'scientific_name' => [
@@ -192,6 +194,22 @@ class SpecieController extends Controller
                 'title' => "Lien iNaturalist (optionnel)",
                 'placeholder' => 'Saisissez le lien iNaturalist',
                 'field' => 'url',
+                'required' => true,
+                'required_on_edit' => true,
+            ],
+            'classification' => [
+                'title' => "Regime alimentaire",
+                'placeholder' => '',
+                'field' => 'select',
+                'options' => $classifications,
+                'required' => true,
+                'required_on_edit' => true,
+            ],
+            'diet' => [
+                'title' => "Regime alimentaire",
+                'placeholder' => '',
+                'field' => 'select',
+                'options' => $diet,
                 'required' => true,
                 'required_on_edit' => true,
             ],

@@ -49,6 +49,13 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (Auth::user()->role == 'agent') {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => trans('Vous ne pouvez pas vous connecter en tant qu\'agent'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -80,6 +87,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

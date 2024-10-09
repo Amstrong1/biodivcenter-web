@@ -29,6 +29,8 @@ class UpdateSpecieRequest extends FormRequest
             'english_name' => ['string', 'max:255'],
             'uicn_link' => ['string', 'max:255'],
             'inaturalist_link' => ['string', 'max:255'],
+            'classification' => ['required'],
+            'diet' => ['required'],
         ];
     }
 }

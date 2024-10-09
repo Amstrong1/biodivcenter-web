@@ -16,6 +16,7 @@ return new class extends Migration
             $table->ulid('specie_id');
             $table->ulid('ong_id');
             $table->ulid('site_id');
+            $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->string('weight');
             $table->string('height');

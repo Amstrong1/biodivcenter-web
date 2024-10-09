@@ -23,7 +23,7 @@ class StoreObservationRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'site' => ['exists:sites,id,ong_id,' . Auth::user()->ong_id],
+            'site_id' => ['exists:sites,id,ong_id,' . Auth::user()->ong_id],
             'subject' => ['required', 'string', 'max:255'],
             'observation' => ['required', 'string'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],

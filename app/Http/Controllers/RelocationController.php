@@ -19,8 +19,13 @@ class RelocationController extends Controller
      */
     public function index()
     {
+        $relocations = Relocation::where('ong_origin_id', Auth::user()->ong_id)
+            ->orWhere('ong_destination_id', Auth::user()->ong_id)
+            ->orderBy('id', 'desc')
+            ->paginate();
+
         return Inertia::render('App/Relocation/Index', [
-            'relocations' => Relocation::where('ong_origin_id', Auth::user()->ong_id)->orWhere('ong_destination_id', Auth::user()->ong_id)->orderBy('id', 'desc')->paginate(),
+            'relocations' => $relocations,
             'csrf' => csrf_token(),
             'my_actions' => $this->relocationActions(),
             'my_attributes' => $this->relocationColumns(),
@@ -40,14 +45,12 @@ class RelocationController extends Controller
         $animal->save();
 
         $data = $request->validated();
-        $data['ong_origin_id'] = $animal->ong_id;
-        $data['site_origin_id'] = $animal->site_id;
         $relocation->create($data);
 
         $newAnimal = $animal->replicate();
-        $newAnimal->ong_id = $data->ong_destination;
-        $newAnimal->site_id = $data->site_destination;
-        $newAnimal->origin = $animal->ong_id;
+        $newAnimal->ong_id = $data->ong_destination_id;
+        $newAnimal->site_id = $data->site_destination_id;
+        $newAnimal->origin = $animal->ong->name . ' - ' . $animal->site->name;
         $newAnimal->state = 'present';
         $newAnimal->save();
     }
@@ -125,7 +128,7 @@ class RelocationController extends Controller
     private function relocationFields()
     {
         $fields = [
-            'animal' => [
+            'animal_id' => [
                 'title' => "Individu",
                 'placeholder' => 'Sélectionner un individu',
                 'field' => 'model',
@@ -133,21 +136,28 @@ class RelocationController extends Controller
                 'required_on_edit' => true,
                 'options' => Animal::where('ong_id', Auth::user()->ong_id)->select('id', 'name')->get(),
             ],
-            'ong_destination' => [
+            'ong_destination_id' => [
                 'title' => "ONG Destination",
                 'placeholder' => 'Sélectionner ONG',
                 'field' => 'model',
                 'required' => true,
                 'required_on_edit' => true,
-                'options' => Ong::all('id', 'name'),
+                'options' => Ong::where('mdt_membership', true)->select('id', 'name')->get(),
             ],
-            'site_destination' => [
+            'site_destination_id' => [
                 'title' => "Site Destination",
                 'placeholder' => 'Sélectionner Site',
-                'field' => 'model',
+                'field' => 'model-optgroup',
                 'required' => true,
                 'required_on_edit' => true,
-                'options' => Site::all('id', 'name'),
+                'options' => Site::all('id', 'name', 'ong_id')->append('ong_name')
+                    ->groupBy('ong_name')
+                    ->map(function ($sites, $ong_name) {
+                        return [
+                            'label' => $ong_name,
+                            'options' => $sites->select('name', 'id'),
+                        ];
+                    }),
             ],
             'date_transfert' => [
                 'title' => "Date de transfert",

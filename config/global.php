@@ -63,4 +63,22 @@ return [
         'supervisor' => 'Superviseur',
         'agent' => 'Agent',
     ],
+
+    'classifications' => [
+        'Mammifères ' => 'Mammifères ',
+        'Oiseaux ' => 'Oiseaux ',
+        'Reptiles ' => 'Reptiles ',
+        'Amphibiens ' => 'Amphibiens ',
+        'Poissons ' => 'Poissons ',
+        'Insectes ' => 'Insectes ',
+        'Arachnides ' => 'Arachnides ',
+    ],
+
+    'diet' => [
+        'Omnivore' => 'Omnivore',
+        'Herbivore' => 'Herbivore',
+        'Carnivore' => 'Carnivore',
+        'Frugivores ' => 'Frugivores ',
+        'Insectivores ' => 'Insectivores ',
+    ],
 ];
